@@ -32,7 +32,7 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2 cursor-pointer group" onClick={() => navigate('/')}>
-            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center group-hover:bg-gray-200 transition-colors duration-300">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 bg-slate-50">
               <Car className="h-6 w-6 text-black" />
             </div>
             <span className="text-2xl font-bold text-white">Uber</span>

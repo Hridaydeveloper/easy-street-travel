@@ -55,7 +55,7 @@ const Navigation = () => {
             <Button onClick={() => navigate('/auth')} className="bg-white text-black hover:bg-gray-200 transition-all duration-300 transform hover:scale-105">
               Sign Up
             </Button>
-            <Button variant="outline" onClick={() => navigate('/driver-portal')} className="border-white hover:bg-white transition-all duration-300 text-zinc-950">
+            <Button variant="outline" onClick={() => navigate('/driver-portal')} className="border-white hover:bg-white transition-all duration-300 text-slate-600">
               <Shield className="h-4 w-4 mr-2" />
               Driver
             </Button>

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Car, Users, Star, Shield, Clock, ArrowRight, CheckCircle } from "lucide-react";
+import { MapPin, Car, Users, Star, Shield, Clock, ArrowRight, CheckCircle, Mail, Phone, MapIcon, Award, Target, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import RideBookingForm from "@/components/RideBookingForm";
@@ -43,12 +43,20 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black text-white">
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-black text-white min-h-screen flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black opacity-50"></div>
+      <section className="relative overflow-hidden bg-black min-h-screen flex items-center pt-16">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+          style={{
+            backgroundImage: `url('/lovable-uploads/bcd9c71b-8043-4e06-b4a9-686d30d12c76.png')`
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+        
         <div className="relative container mx-auto px-4 py-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
@@ -75,54 +83,32 @@ const Index = () => {
             
             <div className="hidden lg:block">
               <div className="relative">
-                <div className="w-96 h-96 rounded-full bg-gray-800 opacity-20 absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4"></div>
-                <div className="w-72 h-72 rounded-full bg-gray-700 opacity-30 absolute bottom-0 left-0 transform -translate-x-1/4 translate-y-1/4"></div>
-                <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700">
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                      <Car className="h-6 w-6 text-black" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-white">Your ride is on the way!</h3>
-                      <p className="text-sm text-gray-300">Driver: John Doe</p>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-300">ETA</span>
-                      <span className="text-sm font-semibold text-white">5 minutes</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-300">Vehicle</span>
-                      <span className="text-sm font-semibold text-white">Toyota Camry</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-300">License</span>
-                      <span className="text-sm font-semibold text-white">ABC-1234</span>
-                    </div>
-                  </div>
-                </div>
+                <img 
+                  src="/lovable-uploads/dc2b1809-4950-48b0-a818-76730bc701c8.png" 
+                  alt="Uber Car" 
+                  className="w-full h-auto rounded-2xl shadow-2xl"
+                />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="services" className="py-20 bg-gray-50">
+      {/* Services Section */}
+      <section id="services" className="py-20 bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
               Use the Uber app to help you travel your way
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
               Whether you're going to work, the airport, or anywhere else, we've got options to get you there.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border-0 overflow-hidden bg-white">
+              <Card key={index} className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border-0 overflow-hidden bg-gray-800">
                 <CardContent className="p-0">
                   <div className="h-80 relative overflow-hidden">
                     <img 
@@ -133,10 +119,10 @@ const Index = () => {
                     <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                   </div>
                   <div className="p-8 space-y-6">
-                    <h3 className="text-2xl font-bold text-black">{feature.title}</h3>
-                    <p className="text-gray-600 leading-relaxed text-lg">{feature.description}</p>
+                    <h3 className="text-2xl font-bold text-white">{feature.title}</h3>
+                    <p className="text-gray-400 leading-relaxed text-lg">{feature.description}</p>
                     <Button 
-                      className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 group"
+                      className="bg-white hover:bg-gray-200 text-black px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 group"
                     >
                       {feature.buttonText}
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -149,12 +135,54 @@ const Index = () => {
         </div>
       </section>
 
+      {/* About Section */}
+      <section id="about" className="py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <h2 className="text-4xl lg:text-5xl font-bold text-white">
+                  About Uber
+                </h2>
+                <p className="text-xl text-gray-300 leading-relaxed">
+                  We reimagine the way the world moves for the better. Movement is what we power. It's our lifeblood. It runs through our veins. It's what gets us out of bed each morning.
+                </p>
+                <p className="text-lg text-gray-400 leading-relaxed">
+                  Our technology and platform help people move forward. We connect riders to drivers at the tap of a button, helping people get where they want to go.
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center p-6 bg-gray-900 rounded-xl">
+                  <Award className="h-12 w-12 text-white mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-white mb-2">Excellence</h3>
+                  <p className="text-gray-400">Committed to providing the best service</p>
+                </div>
+                <div className="text-center p-6 bg-gray-900 rounded-xl">
+                  <Target className="h-12 w-12 text-white mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-white mb-2">Innovation</h3>
+                  <p className="text-gray-400">Leading technology in transportation</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/660b454f-8bfe-4dd4-adb2-e9e8f7ca60d3.png" 
+                alt="About Uber" 
+                className="w-full h-auto rounded-2xl shadow-2xl"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
-      <section className="bg-black text-white py-20">
+      <section className="bg-gray-900 py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Trusted by millions worldwide</h2>
-            <p className="text-gray-300 text-lg">Join the global community that moves with Uber</p>
+            <h2 className="text-4xl font-bold mb-4 text-white">Trusted by millions worldwide</h2>
+            <p className="text-gray-400 text-lg">Join the global community that moves with Uber</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
@@ -167,19 +195,97 @@ const Index = () => {
                 <div className="text-4xl lg:text-6xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
                   {stat.number}
                 </div>
-                <div className="text-gray-300 text-lg">{stat.label}</div>
+                <div className="text-gray-400 text-lg">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+                Get in Touch
+              </h2>
+              <p className="text-xl text-gray-400 leading-relaxed">
+                Have questions? We're here to help you get moving.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {/* Contact Form */}
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-white focus:outline-none"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Your Email"
+                    className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-white focus:outline-none"
+                  />
+                  <textarea
+                    placeholder="Your Message"
+                    rows={6}
+                    className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-white focus:outline-none resize-none"
+                  />
+                </div>
+                <Button className="w-full bg-white text-black hover:bg-gray-200 py-3 transition-all duration-300">
+                  Send Message
+                </Button>
+              </div>
+
+              {/* Contact Info */}
+              <div className="space-y-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Mail className="h-6 w-6 text-black" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Email Us</h3>
+                    <p className="text-gray-400">support@uber.com</p>
+                    <p className="text-gray-400">partnerships@uber.com</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Phone className="h-6 w-6 text-black" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Call Us</h3>
+                    <p className="text-gray-400">+1 (800) 593-7069</p>
+                    <p className="text-gray-400">24/7 Support Available</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
+                    <MapIcon className="h-6 w-6 text-black" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Visit Us</h3>
+                    <p className="text-gray-400">1455 Market Street</p>
+                    <p className="text-gray-400">San Francisco, CA 94103</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-20 bg-gray-900 text-white relative overflow-hidden">
+      <section className="py-20 bg-gray-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-black opacity-50"></div>
         <div className="relative container mx-auto px-4 text-center">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-6">Ready to get started?</h2>
-          <p className="text-xl mb-10 max-w-2xl mx-auto text-gray-300 leading-relaxed">
+          <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white">Ready to get started?</h2>
+          <p className="text-xl mb-10 max-w-2xl mx-auto text-gray-400 leading-relaxed">
             Join millions of users who trust our platform for their daily commute and travel needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">

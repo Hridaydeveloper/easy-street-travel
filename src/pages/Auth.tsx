@@ -4,12 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Car, Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft, UserCheck } from "lucide-react";
+import { Car, Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft, UserCheck, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const Auth = () => {
+interface AuthProps {
+  onSkip?: () => void;
+}
+
+const Auth = ({ onSkip }: AuthProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loginMethod, setLoginMethod] = useState('email'); // 'email' or 'phone'
+  const [loginMethod, setLoginMethod] = useState('email');
   const [loginData, setLoginData] = useState({ email: '', phone: '', password: '' });
   const [signupData, setSignupData] = useState({ 
     firstName: '', 
@@ -23,17 +27,37 @@ const Auth = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Login:', loginData);
-    navigate('/dashboard');
+    if (onSkip) {
+      onSkip();
+    } else {
+      navigate('/dashboard');
+    }
   };
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Signup:', signupData);
-    navigate('/dashboard');
+    if (onSkip) {
+      onSkip();
+    } else {
+      navigate('/dashboard');
+    }
   };
 
-  const handleGuestAccess = () => {
-    navigate('/');
+  const handleSkip = () => {
+    if (onSkip) {
+      onSkip();
+    } else {
+      navigate('/');
+    }
+  };
+
+  const handleBack = () => {
+    if (onSkip) {
+      onSkip();
+    } else {
+      navigate('/');
+    }
   };
 
   return (
@@ -46,14 +70,24 @@ const Auth = () => {
         }}
       />
       
-      {/* Back Button */}
+      {/* Back/Close Button */}
       <Button
         variant="ghost"
-        onClick={() => navigate('/')}
+        onClick={handleBack}
         className="absolute top-4 left-4 text-white hover:bg-white/10 z-10"
       >
         <ArrowLeft className="h-5 w-5 mr-2" />
-        Back to Home
+        Back
+      </Button>
+
+      {/* Skip Button */}
+      <Button
+        variant="ghost"
+        onClick={handleSkip}
+        className="absolute top-4 right-4 text-white hover:bg-white/10 z-10"
+      >
+        <X className="h-5 w-5 mr-2" />
+        Skip
       </Button>
 
       <div className="w-full max-w-md relative z-10">
@@ -235,11 +269,11 @@ const Auth = () => {
               </TabsContent>
             </Tabs>
 
-            {/* Guest Access */}
+            {/* Skip/Guest Access */}
             <div className="mt-6 text-center">
               <Button 
                 variant="ghost" 
-                onClick={handleGuestAccess}
+                onClick={handleSkip}
                 className="text-white hover:bg-white/10 w-full"
               >
                 <UserCheck className="h-4 w-4 mr-2" />

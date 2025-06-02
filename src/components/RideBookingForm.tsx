@@ -41,7 +41,7 @@ const RideBookingForm = () => {
             placeholder="Enter pickup location"
             value={pickup}
             onChange={(e) => setPickup(e.target.value)}
-            className="pl-10 bg-white/10 border-white/20 placeholder-white/60 text-white focus:border-white"
+            className="pl-10 bg-white/10 border-white/20 placeholder-white text-white focus:border-white"
           />
         </div>
         
@@ -51,7 +51,7 @@ const RideBookingForm = () => {
             placeholder="Enter destination"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            className="pl-10 bg-white/10 border-white/20 placeholder-white/60 text-white focus:border-white"
+            className="pl-10 bg-white/10 border-white/20 placeholder-white text-white focus:border-white"
           />
         </div>
       </div>

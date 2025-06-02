@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation } from "lucide-react";
+import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const DriverPortal = () => {
@@ -31,65 +30,95 @@ const DriverPortal = () => {
     { id: 'settings', icon: <Settings className="h-5 w-5" />, label: 'Settings' }
   ];
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg">
-        <div className="p-6 border-b">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <Car className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-800">Driver</span>
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'rides':
+        return (
+          <div className="space-y-6">
+            <h1 className="text-3xl font-bold text-white">Active Rides</h1>
+            <Card className="bg-gray-800 border-gray-700">
+              <CardContent className="p-12 text-center">
+                <Car className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">No active rides</h3>
+                <p className="text-gray-400">You don't have any active rides at the moment</p>
+              </CardContent>
+            </Card>
           </div>
-          
-          {/* Online Status Toggle */}
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="font-medium text-gray-700">Online Status</span>
-            <div className="flex items-center space-x-2">
-              <Switch 
-                checked={isOnline} 
-                onCheckedChange={setIsOnline}
-                className="data-[state=checked]:bg-green-500"
-              />
-              <Badge variant={isOnline ? 'default' : 'secondary'} className={isOnline ? 'bg-green-500' : 'bg-gray-400'}>
-                {isOnline ? 'Online' : 'Offline'}
-              </Badge>
-            </div>
+        );
+      case 'profile':
+        return (
+          <div className="space-y-6">
+            <h1 className="text-3xl font-bold text-white">Driver Profile</h1>
+            <Card className="bg-gray-800 border-gray-700">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="w-20 h-20 bg-gray-600 rounded-full flex items-center justify-center">
+                    <User className="h-10 w-10 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">Mike Johnson</h2>
+                    <p className="text-gray-400">Driver since 2020</p>
+                    <div className="flex items-center space-x-2 mt-2">
+                      <Star className="h-5 w-5 text-yellow-500" />
+                      <span className="text-white font-semibold">4.8</span>
+                      <span className="text-gray-400">(1,234 ratings)</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-gray-700 p-4 rounded-lg text-center">
+                    <p className="text-gray-400">Total Trips</p>
+                    <p className="text-2xl font-bold text-white">2,847</p>
+                  </div>
+                  <div className="bg-gray-700 p-4 rounded-lg text-center">
+                    <p className="text-gray-400">Years Active</p>
+                    <p className="text-2xl font-bold text-white">4</p>
+                  </div>
+                  <div className="bg-gray-700 p-4 rounded-lg text-center">
+                    <p className="text-gray-400">Vehicle</p>
+                    <p className="text-lg font-semibold text-white">Honda Civic 2019</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-        </div>
-
-        <nav className="mt-6">
-          {sidebarItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors duration-200 ${
-                activeTab === item.id 
-                  ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-600' 
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              {item.icon}
-              <span className="font-medium">{item.label}</span>
-            </button>
-          ))}
-        </nav>
-
-        <div className="absolute bottom-0 w-64 p-6 border-t">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate('/')}
-            className="w-full justify-start text-gray-600 hover:text-gray-800"
-          >
-            Back to Home
-          </Button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 p-8">
-        {activeTab === 'dashboard' && (
+        );
+      case 'settings':
+        return (
+          <div className="space-y-6">
+            <h1 className="text-3xl font-bold text-white">Settings</h1>
+            <Card className="bg-gray-800 border-gray-700">
+              <CardContent className="p-6 space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-white">Preferences</h3>
+                  <div className="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+                    <span className="text-white">Push Notifications</span>
+                    <Switch defaultChecked />
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+                    <span className="text-white">Email Updates</span>
+                    <Switch defaultChecked />
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+                    <span className="text-white">Sound Alerts</span>
+                    <Switch defaultChecked />
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-white">Account</h3>
+                  <Button variant="outline" className="w-full border-gray-600 text-white hover:bg-gray-700">
+                    Change Password
+                  </Button>
+                  <Button variant="outline" className="w-full border-gray-600 text-white hover:bg-gray-700">
+                    Update Payment Method
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      default:
+        return (
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <div>
@@ -209,47 +238,78 @@ const DriverPortal = () => {
               </Card>
             )}
           </div>
-        )}
+        );
+    }
+  };
 
-        {activeTab === 'earnings' && (
-          <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-800">Earnings Overview</h1>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <DollarSign className="h-8 w-8 text-green-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Today</p>
-                  <p className="text-2xl font-bold text-green-600">{earnings.today}</p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <BarChart3 className="h-8 w-8 text-blue-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">This Week</p>
-                  <p className="text-2xl font-bold text-blue-600">{earnings.week}</p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Star className="h-8 w-8 text-purple-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">This Month</p>
-                  <p className="text-2xl font-bold text-purple-600">{earnings.month}</p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <Clock className="h-8 w-8 text-orange-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Hours Online</p>
-                  <p className="text-2xl font-bold text-orange-600">42.5</p>
-                </CardContent>
-              </Card>
+  return (
+    <div className="min-h-screen bg-black flex relative">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+        style={{
+          backgroundImage: `url('/lovable-uploads/dc2b1809-4950-48b0-a818-76730bc701c8.png')`
+        }}
+      />
+      
+      {/* Sidebar */}
+      <div className="relative w-64 bg-gray-900/95 backdrop-blur-md shadow-lg border-r border-gray-700">
+        <div className="p-6 border-b border-gray-700">
+          <div className="flex items-center space-x-2 mb-4">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <Car className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-2xl font-bold text-white">Driver</span>
+          </div>
+          
+          {/* Online Status Toggle */}
+          <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+            <span className="font-medium text-white">Online Status</span>
+            <div className="flex items-center space-x-2">
+              <Switch 
+                checked={isOnline} 
+                onCheckedChange={setIsOnline}
+                className="data-[state=checked]:bg-green-500"
+              />
+              <Badge variant={isOnline ? 'default' : 'secondary'} className={isOnline ? 'bg-green-500' : 'bg-gray-400'}>
+                {isOnline ? 'Online' : 'Offline'}
+              </Badge>
             </div>
           </div>
-        )}
+        </div>
+
+        <nav className="mt-6">
+          {sidebarItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors duration-200 ${
+                activeTab === item.id 
+                  ? 'bg-blue-500/20 text-blue-400 border-r-2 border-blue-500' 
+                  : 'text-gray-300 hover:bg-gray-800/50'
+              }`}
+            >
+              {item.icon}
+              <span className="font-medium">{item.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="absolute bottom-0 w-64 p-6 border-t border-gray-700">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/')}
+            className="w-full justify-start text-white border-white hover:bg-white hover:text-black transition-all duration-300 bg-white/10"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative flex-1 p-8">
+        {renderContent()}
       </div>
     </div>
   );

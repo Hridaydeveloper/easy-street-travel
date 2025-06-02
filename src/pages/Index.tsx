@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,7 +16,7 @@ const Index = () => {
       title: "Ride Options",
       description: "There's more than one way to move with Uber, no matter where you are or where you're headed next.",
       buttonText: "Search ride options",
-      image: "https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,h_372,w_558/v1565733741/assets/0f/9719ad-69a4-4c0d-9444-ce6d8c3f9759/original/Signup.svg"
+      image: "https://www.pinclipart.com/picdir/big/541-5411434_uber-illustrations-clipart.png"
     },
     {
       icon: <MapPin className="h-12 w-12 text-white" />,

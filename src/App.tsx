@@ -14,6 +14,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Services from "./pages/Services";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Careers from "./pages/Careers";
+import Business from "./pages/Business";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,7 +28,7 @@ const App = () => {
     const timer = setTimeout(() => {
       setIsLoading(false);
       setShowAuth(true);
-    }, 1000); // Changed to 1 second
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -69,6 +71,8 @@ const App = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/business" element={<Business />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

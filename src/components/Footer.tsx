@@ -6,41 +6,68 @@ import { useNavigate } from "react-router-dom";
 const Footer = () => {
   const navigate = useNavigate();
 
+  const scrollToSection = (sectionId: string) => {
+    // First navigate to home page if not already there
+    if (window.location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
+
+  const handleSocialClick = () => {
+    window.open('https://www.linkedin.com/in/hriday-das-390a61286/', '_blank');
+  };
+
   const footerSections = [
     {
       title: "Company",
       links: [
-        { name: "About Us", action: () => navigate('/about') },
-        { name: "Our Team", action: () => navigate('/about') },
-        { name: "Careers", action: () => navigate('/about') },
-        { name: "Press", action: () => navigate('/about') }
+        { name: "About Us", action: () => scrollToSection('about') },
+        { name: "Our Team", action: () => scrollToSection('about') },
+        { name: "Careers", action: () => navigate('/careers') },
+        { name: "Press", action: () => navigate('/press') }
       ]
     },
     {
-      title: "Products",
+      title: "Products", 
       links: [
         { name: "Ride", action: () => navigate('/') },
         { name: "Drive", action: () => navigate('/driver-portal') },
-        { name: "Business", action: () => navigate('/') },
-        { name: "Freight", action: () => navigate('/') }
+        { name: "Business", action: () => navigate('/business') },
+        { name: "Freight", action: () => navigate('/freight') }
       ]
     },
     {
       title: "Global citizenship",
       links: [
-        { name: "Safety", action: () => navigate('/') },
-        { name: "Diversity", action: () => navigate('/') },
-        { name: "Transparency", action: () => navigate('/') },
-        { name: "Sustainability", action: () => navigate('/') }
+        { name: "Safety", action: () => navigate('/safety') },
+        { name: "Diversity", action: () => navigate('/diversity') },
+        { name: "Transparency", action: () => navigate('/transparency') },
+        { name: "Sustainability", action: () => navigate('/sustainability') }
       ]
     },
     {
       title: "Travel",
       links: [
-        { name: "Airports", action: () => navigate('/') },
-        { name: "Cities", action: () => navigate('/') },
-        { name: "Estimates", action: () => navigate('/') },
-        { name: "Gift cards", action: () => navigate('/') }
+        { name: "Airports", action: () => navigate('/airports') },
+        { name: "Cities", action: () => navigate('/cities') },
+        { name: "Estimates", action: () => navigate('/estimates') },
+        { name: "Gift cards", action: () => navigate('/gift-cards') }
       ]
     }
   ];
@@ -62,16 +89,28 @@ const Footer = () => {
               Move the way you want. Uber is evolving the way the world moves. By seamlessly connecting riders to drivers through our apps, we make cities more accessible, opening up more possibilities for riders and more business for drivers.
             </p>
             <div className="flex space-x-4">
-              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors">
+              <div 
+                onClick={handleSocialClick}
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors"
+              >
                 <Facebook className="h-5 w-5" />
               </div>
-              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors">
+              <div 
+                onClick={handleSocialClick}
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors"
+              >
                 <Twitter className="h-5 w-5" />
               </div>
-              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors">
+              <div 
+                onClick={handleSocialClick}
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors"
+              >
                 <Instagram className="h-5 w-5" />
               </div>
-              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors">
+              <div 
+                onClick={handleSocialClick}
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors"
+              >
                 <Linkedin className="h-5 w-5" />
               </div>
             </div>
@@ -133,16 +172,28 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-wrap gap-6 mb-4 md:mb-0">
-            <button className="text-gray-300 hover:text-white transition-colors text-sm">
+            <button 
+              onClick={() => navigate('/privacy')}
+              className="text-gray-300 hover:text-white transition-colors text-sm"
+            >
               Privacy Policy
             </button>
-            <button className="text-gray-300 hover:text-white transition-colors text-sm">
+            <button 
+              onClick={() => navigate('/terms')}
+              className="text-gray-300 hover:text-white transition-colors text-sm"
+            >
               Terms of Service
             </button>
-            <button className="text-gray-300 hover:text-white transition-colors text-sm">
+            <button 
+              onClick={() => navigate('/cookies')}
+              className="text-gray-300 hover:text-white transition-colors text-sm"
+            >
               Cookie Policy
             </button>
-            <button className="text-gray-300 hover:text-white transition-colors text-sm">
+            <button 
+              onClick={() => navigate('/accessibility')}
+              className="text-gray-300 hover:text-white transition-colors text-sm"
+            >
               Accessibility
             </button>
           </div>

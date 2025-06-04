@@ -1,10 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Clock, Send, MessageCircle, HelpCircle, Shield } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import emailjs from '@emailjs/browser';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
@@ -15,11 +16,39 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  const [isSending, setIsSending] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission
+    if (!formRef.current) return;
+
+    setIsSending(true);
+    
+    try {
+      await emailjs.sendForm(
+        'service_t0df6eb',
+        'template_3ciosq9',
+        formRef.current,
+        '2CJLDvC3dzTRKprKf'
+      );
+      
+      toast({
+        title: "Success!",
+        description: "✅ Message sent successfully!",
+      });
+      
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      toast({
+        title: "Error",
+        description: "❌ Failed to send message. Try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const contactMethods = [
@@ -90,7 +119,29 @@ const Contact = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {contactMethods.map((method, index) => (
+            {[
+              {
+                icon: <Mail className="h-8 w-8 text-white" />,
+                title: "Email Support",
+                description: "Get help via email within 24 hours",
+                contact: "support@uber.com",
+                action: "Send Email"
+              },
+              {
+                icon: <Phone className="h-8 w-8 text-white" />,
+                title: "Phone Support", 
+                description: "Speak with our support team directly",
+                contact: "+1 (555) 123-4567",
+                action: "Call Now"
+              },
+              {
+                icon: <MessageCircle className="h-8 w-8 text-white" />,
+                title: "Live Chat",
+                description: "Chat with us in real-time",
+                contact: "Available 24/7",
+                action: "Start Chat"
+              }
+            ].map((method, index) => (
               <Card key={index} className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border-0 overflow-hidden">
                 <CardContent className="p-8 text-center space-y-6">
                   <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto group-hover:bg-gray-800 transition-colors duration-300">
@@ -122,7 +173,7 @@ const Contact = () => {
             
             <Card className="border-0 shadow-2xl">
               <CardContent className="p-8">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -130,6 +181,7 @@ const Contact = () => {
                       </label>
                       <Input
                         id="name"
+                        name="name"
                         type="text"
                         required
                         value={formData.name}
@@ -144,6 +196,7 @@ const Contact = () => {
                       </label>
                       <Input
                         id="email"
+                        name="email"
                         type="email"
                         required
                         value={formData.email}
@@ -160,6 +213,7 @@ const Contact = () => {
                     </label>
                     <Input
                       id="subject"
+                      name="subject"
                       type="text"
                       required
                       value={formData.subject}
@@ -175,6 +229,7 @@ const Contact = () => {
                     </label>
                     <Textarea
                       id="message"
+                      name="message"
                       required
                       rows={6}
                       value={formData.message}
@@ -186,9 +241,10 @@ const Contact = () => {
                   
                   <Button 
                     type="submit"
-                    className="w-full bg-black hover:bg-gray-800 text-white py-4 text-lg font-semibold transition-all duration-300 transform hover:scale-105 group"
+                    disabled={isSending}
+                    className="w-full bg-black hover:bg-gray-800 text-white py-4 text-lg font-semibold transition-all duration-300 transform hover:scale-105 group disabled:opacity-50"
                   >
-                    Send Message
+                    {isSending ? 'Sending...' : 'Send Message'}
                     <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </form>
@@ -209,7 +265,23 @@ const Contact = () => {
           </div>
           
           <div className="max-w-4xl mx-auto space-y-6">
-            {faqs.map((faq, index) => (
+            {[
+              {
+                icon: <HelpCircle className="h-6 w-6 text-black" />,
+                question: "How do I request a ride?",
+                answer: "Simply open the app, enter your destination, choose your ride type, and confirm your pickup location."
+              },
+              {
+                icon: <Shield className="h-6 w-6 text-black" />,
+                question: "Is my ride safe?",
+                answer: "All drivers are background-checked, and we provide real-time tracking and emergency features for your safety."
+              },
+              {
+                icon: <Clock className="h-6 w-6 text-black" />,
+                question: "How long will my driver take to arrive?",
+                answer: "Pickup times vary by location and demand, but you'll see an estimated arrival time before confirming your ride."
+              }
+            ].map((faq, index) => (
               <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-8">
                   <div className="flex items-start space-x-4">

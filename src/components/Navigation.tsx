@@ -96,9 +96,8 @@ const Navigation = () => {
               Sign Up
             </Button>
             <Button 
-              variant="outline" 
               onClick={() => navigate('/driver-portal')} 
-              className="border-white text-white hover:bg-white hover:text-black transition-all duration-300"
+              className="bg-white text-black hover:bg-gray-200 transition-all duration-300 border-none"
             >
               <Shield className="h-4 w-4 mr-2" />
               Driver
@@ -147,9 +146,8 @@ const Navigation = () => {
                   Sign Up
                 </Button>
                 <Button 
-                  variant="outline" 
                   onClick={() => navigate('/driver-portal')} 
-                  className="w-full border-white text-white hover:bg-white hover:text-black"
+                  className="w-full bg-white text-black hover:bg-gray-200"
                 >
                   <Shield className="h-4 w-4 mr-2" />
                   Driver Portal

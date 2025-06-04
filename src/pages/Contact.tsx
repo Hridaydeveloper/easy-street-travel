@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Clock, Send, MessageCircle, HelpCircle, Shield } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import emailjs from '@emailjs/browser';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -33,19 +33,11 @@ const Contact = () => {
         '2CJLDvC3dzTRKprKf'
       );
       
-      toast({
-        title: "Success!",
-        description: "✅ Message sent successfully!",
-      });
-      
+      toast.success("✅ Message sent successfully!");
       setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
       console.error("EmailJS Error:", error);
-      toast({
-        title: "Error",
-        description: "❌ Failed to send message. Try again later.",
-        variant: "destructive",
-      });
+      toast.error("❌ Failed to send message. Try again later.");
     } finally {
       setIsSending(false);
     }
@@ -119,29 +111,7 @@ const Contact = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Mail className="h-8 w-8 text-white" />,
-                title: "Email Support",
-                description: "Get help via email within 24 hours",
-                contact: "support@uber.com",
-                action: "Send Email"
-              },
-              {
-                icon: <Phone className="h-8 w-8 text-white" />,
-                title: "Phone Support", 
-                description: "Speak with our support team directly",
-                contact: "+1 (555) 123-4567",
-                action: "Call Now"
-              },
-              {
-                icon: <MessageCircle className="h-8 w-8 text-white" />,
-                title: "Live Chat",
-                description: "Chat with us in real-time",
-                contact: "Available 24/7",
-                action: "Start Chat"
-              }
-            ].map((method, index) => (
+            {contactMethods.map((method, index) => (
               <Card key={index} className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border-0 overflow-hidden">
                 <CardContent className="p-8 text-center space-y-6">
                   <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto group-hover:bg-gray-800 transition-colors duration-300">
@@ -265,23 +235,7 @@ const Contact = () => {
           </div>
           
           <div className="max-w-4xl mx-auto space-y-6">
-            {[
-              {
-                icon: <HelpCircle className="h-6 w-6 text-black" />,
-                question: "How do I request a ride?",
-                answer: "Simply open the app, enter your destination, choose your ride type, and confirm your pickup location."
-              },
-              {
-                icon: <Shield className="h-6 w-6 text-black" />,
-                question: "Is my ride safe?",
-                answer: "All drivers are background-checked, and we provide real-time tracking and emergency features for your safety."
-              },
-              {
-                icon: <Clock className="h-6 w-6 text-black" />,
-                question: "How long will my driver take to arrive?",
-                answer: "Pickup times vary by location and demand, but you'll see an estimated arrival time before confirming your ride."
-              }
-            ].map((faq, index) => (
+            {faqs.map((faq, index) => (
               <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-8">
                   <div className="flex items-start space-x-4">

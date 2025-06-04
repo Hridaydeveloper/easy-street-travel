@@ -69,7 +69,7 @@ const RideBookingForm = () => {
         </Button>
         <Button 
           variant="outline" 
-          className="px-6 bg-white text-black border-white hover:bg-gray-200 hover:text-black transition-all duration-300"
+          className="px-6 bg-white text-black border-white hover:bg-white hover:text-black transition-all duration-300"
         >
           Schedule for later
         </Button>

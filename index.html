@@ -20,6 +20,14 @@
 
   <body>
     <div id="root"></div>
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoA0Tm4J5P1P5UFvR3wXLVjki1ECShUMw&libraries=places&callback=initMap" async defer></script>
+    <script>
+      function initMap() {
+        // Google Maps is loaded and ready
+        console.log('Google Maps API loaded successfully');
+      }
+    </script>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>

@@ -1,9 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Search } from "lucide-react";
-import "../types/google-maps";
 
 interface SelectedLocation {
   address: string;

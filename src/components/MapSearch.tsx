@@ -148,7 +148,7 @@ const MapSearch = () => {
             lng: place.geometry.location?.lng() || 0
           };
 
-          // Remove previous marker
+          // Remove previous marker - use setMap(null) instead of setMap(null)
           if (currentMarker) {
             currentMarker.setMap(null);
           }
@@ -171,8 +171,8 @@ const MapSearch = () => {
 
           setCurrentMarker(newMarker);
 
-          // Center map on new location
-          map.setCenter(coordinates);
+          // Center map on new location - use panTo and setZoom
+          map.panTo(coordinates);
           map.setZoom(15);
 
           // Update selected location

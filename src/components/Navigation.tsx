@@ -1,161 +1,149 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Car, Menu, User, Shield, X } from "lucide-react";
+import { Menu, X, Car } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const scrollToSection = (sectionId: string) => {
-    // First navigate to home page if not already there
-    if (window.location.pathname !== '/') {
-      navigate('/');
-      // Wait for navigation to complete, then scroll
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({
-            behavior: 'smooth'
-          });
-        }
-      }, 100);
-    } else {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({
-          behavior: 'smooth'
-        });
-      }
-    }
-    setIsMobileMenuOpen(false);
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsOpen(false);
   };
-
-  const handleHomeClick = () => {
-    navigate('/');
-    setIsMobileMenuOpen(false);
-  };
-
-  const navItems = [
-    {
-      label: "HOME",
-      action: handleHomeClick
-    },
-    {
-      label: "SERVICES",
-      action: () => scrollToSection('services')
-    },
-    {
-      label: "ABOUT",
-      action: () => scrollToSection('about')
-    },
-    {
-      label: "CONTACT",
-      action: () => scrollToSection('contact')
-    }
-  ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-black/95 backdrop-blur-md border-b border-gray-800 z-50 shadow-2xl">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo - Made clickable and functional */}
-          <div 
-            className="flex items-center space-x-2 cursor-pointer group" 
-            onClick={handleHomeClick}
-          >
-            <span className="text-2xl font-bold text-white group-hover:text-gray-300 transition-colors">
-              Uber
-            </span>
+    <nav className="bg-white shadow-sm border-b fixed w-full top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          {/* Logo */}
+          <div className="flex items-center">
+            <button 
+              onClick={() => handleNavigation('/')}
+              className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+            >
+              <Car className="h-8 w-8 text-black" />
+              <span className="text-xl font-bold text-black">UberClone</span>
+            </button>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item, index) => (
-              <button
-                key={index}
-                onClick={item.action}
-                className="text-gray-300 hover:text-white font-medium transition-colors duration-200 relative group"
-              >
-                {item.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></span>
-              </button>
-            ))}
-          </div>
-
-          {/* Action Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/auth')} 
-              className="text-gray-300 hover:text-white hover:bg-gray-800 border-none"
+            <button 
+              onClick={() => handleNavigation('/services')}
+              className="text-gray-700 hover:text-black transition-colors"
             >
-              <User className="h-4 w-4 mr-2" />
-              Log in
-            </Button>
-            <Button 
-              onClick={() => navigate('/auth')} 
-              className="bg-white text-black hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 border-none"
+              Services
+            </button>
+            <button 
+              onClick={() => handleNavigation('/about')}
+              className="text-gray-700 hover:text-black transition-colors"
             >
-              Sign Up
-            </Button>
-            <Button 
-              onClick={() => navigate('/driver-portal')} 
-              className="bg-white text-black hover:bg-gray-200 transition-all duration-300 border-none"
+              About
+            </button>
+            <button 
+              onClick={() => handleNavigation('/contact')}
+              className="text-gray-700 hover:text-black transition-colors"
             >
-              <Shield className="h-4 w-4 mr-2" />
+              Contact
+            </button>
+            <button 
+              onClick={() => handleNavigation('/map-explorer')}
+              className="text-gray-700 hover:text-black transition-colors"
+            >
+              Map Explorer
+            </button>
+            <button 
+              onClick={() => handleNavigation('/careers')}
+              className="text-gray-700 hover:text-black transition-colors"
+            >
+              Careers
+            </button>
+            <button 
+              onClick={() => handleNavigation('/business')}
+              className="text-gray-700 hover:text-black transition-colors"
+            >
+              Business
+            </button>
+            
+            <Button 
+              onClick={() => handleNavigation('/driver-portal')}
+              className="bg-white text-black border border-gray-300 hover:bg-gray-100"
+            >
               Driver
             </Button>
+            <Button 
+              onClick={() => handleNavigation('/auth')}
+              className="bg-black text-white hover:bg-gray-800"
+            >
+              Sign up
+            </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-              className="text-white hover:bg-gray-800"
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-gray-700 hover:text-black transition-colors"
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-black/95 backdrop-blur-md border-b border-gray-800 shadow-lg">
-            <div className="px-4 py-4 space-y-4">
-              {navItems.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={item.action}
-                  className="block w-full text-left text-gray-300 hover:text-white font-medium py-2"
-                >
-                  {item.label}
-                </button>
-              ))}
-              <div className="border-t border-gray-800 pt-4 space-y-3">
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+              <button 
+                onClick={() => handleNavigation('/services')}
+                className="block px-3 py-2 text-gray-700 hover:text-black transition-colors w-full text-left"
+              >
+                Services
+              </button>
+              <button 
+                onClick={() => handleNavigation('/about')}
+                className="block px-3 py-2 text-gray-700 hover:text-black transition-colors w-full text-left"
+              >
+                About
+              </button>
+              <button 
+                onClick={() => handleNavigation('/contact')}
+                className="block px-3 py-2 text-gray-700 hover:text-black transition-colors w-full text-left"
+              >
+                Contact
+              </button>
+              <button 
+                onClick={() => handleNavigation('/map-explorer')}
+                className="block px-3 py-2 text-gray-700 hover:text-black transition-colors w-full text-left"
+              >
+                Map Explorer
+              </button>
+              <button 
+                onClick={() => handleNavigation('/careers')}
+                className="block px-3 py-2 text-gray-700 hover:text-black transition-colors w-full text-left"
+              >
+                Careers
+              </button>
+              <button 
+                onClick={() => handleNavigation('/business')}
+                className="block px-3 py-2 text-gray-700 hover:text-black transition-colors w-full text-left"
+              >
+                Business
+              </button>
+              <div className="px-3 py-2 space-y-2">
                 <Button 
-                  variant="ghost" 
-                  onClick={() => navigate('/auth')} 
-                  className="w-full justify-start text-gray-300 hover:text-white hover:bg-gray-800"
+                  onClick={() => handleNavigation('/driver-portal')}
+                  className="w-full bg-white text-black border border-gray-300 hover:bg-gray-100"
                 >
-                  <User className="h-4 w-4 mr-2" />
-                  Log in
+                  Driver
                 </Button>
                 <Button 
-                  onClick={() => navigate('/auth')} 
-                  className="w-full bg-white text-black hover:bg-gray-200"
+                  onClick={() => handleNavigation('/auth')}
+                  className="w-full bg-black text-white hover:bg-gray-800"
                 >
-                  Sign Up
-                </Button>
-                <Button 
-                  onClick={() => navigate('/driver-portal')} 
-                  className="w-full bg-white text-black hover:bg-gray-200"
-                >
-                  <Shield className="h-4 w-4 mr-2" />
-                  Driver Portal
+                  Sign up
                 </Button>
               </div>
             </div>

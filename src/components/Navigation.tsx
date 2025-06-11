@@ -60,9 +60,14 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 bg-black/95 backdrop-blur-md border-b border-gray-800 z-50 shadow-2xl">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2 cursor-pointer group" onClick={handleHomeClick}>
-            <span className="text-2xl font-bold text-white">Uber</span>
+          {/* Logo - Made clickable and functional */}
+          <div 
+            className="flex items-center space-x-2 cursor-pointer group" 
+            onClick={handleHomeClick}
+          >
+            <span className="text-2xl font-bold text-white group-hover:text-gray-300 transition-colors">
+              Uber
+            </span>
           </div>
 
           {/* Desktop Navigation */}

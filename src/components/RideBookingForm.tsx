@@ -1,19 +1,49 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { MapPin, Navigation, Calendar, Clock } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import LocationSearchInput from './LocationSearchInput';
+
+interface LocationData {
+  address: string;
+  placeId?: string;
+  coordinates?: { lat: number; lng: number };
+}
 
 const RideBookingForm = () => {
-  const [pickup, setPickup] = useState('');
-  const [destination, setDestination] = useState('');
+  const navigate = useNavigate();
+  const [pickup, setPickup] = useState<LocationData>({ address: '' });
+  const [destination, setDestination] = useState<LocationData>({ address: '' });
   const [rideType, setRideType] = useState('now');
 
+  const handlePickupChange = (address: string, placeId?: string, coordinates?: { lat: number; lng: number }) => {
+    setPickup({ address, placeId, coordinates });
+  };
+
+  const handleDestinationChange = (address: string, placeId?: string, coordinates?: { lat: number; lng: number }) => {
+    setDestination({ address, placeId, coordinates });
+  };
+
   const handleBookRide = () => {
+    if (!pickup.address || !destination.address) {
+      alert('Please enter both pickup and destination locations');
+      return;
+    }
+
     console.log('Booking ride:', {
       pickup,
       destination,
       rideType
+    });
+
+    // Navigate to pricing page with location data
+    navigate('/ride-pricing', {
+      state: {
+        pickup,
+        destination,
+        rideType
+      }
     });
   };
 
@@ -31,7 +61,7 @@ const RideBookingForm = () => {
         <Button 
           variant={rideType === 'later' ? 'default' : 'ghost'} 
           onClick={() => setRideType('later')} 
-          className={`flex-1 ${rideType === 'later' ? 'bg-white text-black hover:bg-gray-200' : 'text-white hover:bg-white/10'}`}
+          className={`flex-1 ${rideType === 'later' ? 'bg-white text-black hover:bg-gray-200' : 'text-white hover:bg-white/10 hover:text-white'}`}
         >
           <Calendar className="h-4 w-4 mr-2" />
           Schedule for later
@@ -39,25 +69,19 @@ const RideBookingForm = () => {
       </div>
 
       <div className="space-y-3">
-        <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <Input 
-            placeholder="Enter pickup location" 
-            value={pickup} 
-            onChange={e => setPickup(e.target.value)} 
-            className="pl-10 bg-white/10 border-white/20 placeholder-white text-white focus:border-white" 
-          />
-        </div>
+        <LocationSearchInput
+          placeholder="Enter pickup location"
+          value={pickup.address}
+          onChange={handlePickupChange}
+          icon="pickup"
+        />
         
-        <div className="relative">
-          <Navigation className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <Input 
-            placeholder="Enter destination" 
-            value={destination} 
-            onChange={e => setDestination(e.target.value)} 
-            className="pl-10 bg-white/10 border-white/20 placeholder-white text-white focus:border-white" 
-          />
-        </div>
+        <LocationSearchInput
+          placeholder="Enter destination"
+          value={destination.address}
+          onChange={handleDestinationChange}
+          icon="destination"
+        />
       </div>
 
       <div className="flex space-x-3 pt-2">

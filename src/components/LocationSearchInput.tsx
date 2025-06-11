@@ -46,8 +46,8 @@ const LocationSearchInput: React.FC<LocationSearchInputProps> = ({
     if (inputValue.length > 2 && autocompleteService.current) {
       const request = {
         input: inputValue,
-        types: ['geocode', 'establishment'],
-        componentRestrictions: { country: 'us' } // You can change this or remove for global search
+        types: ['geocode', 'establishment']
+        // Removed country restriction for worldwide search
       };
 
       autocompleteService.current.getPlacePredictions(request, (predictions, status) => {

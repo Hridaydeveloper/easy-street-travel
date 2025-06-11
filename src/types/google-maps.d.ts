@@ -25,10 +25,16 @@ declare global {
   namespace google.maps {
     class Map {
       constructor(element: HTMLElement, options: any);
+      setCenter(latLng: { lat: number; lng: number }): void;
+      setZoom(zoom: number): void;
+      getCenter(): { lat: number; lng: number };
+      getZoom(): number;
     }
     
     class Marker {
       constructor(options: any);
+      setMap(map: Map | null): void;
+      getPosition(): { lat(): number; lng(): number };
     }
     
     class DirectionsService {

@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, Car } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import UserProfile from "./UserProfile";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,12 +73,9 @@ const Navigation = () => {
             >
               Driver
             </Button>
-            <Button 
-              onClick={() => handleNavigation('/auth')}
-              className="bg-black text-white hover:bg-gray-800"
-            >
-              Sign up
-            </Button>
+            
+            {/* User Profile Component */}
+            <UserProfile />
           </div>
 
           {/* Mobile menu button */}
@@ -139,12 +136,9 @@ const Navigation = () => {
                 >
                   Driver
                 </Button>
-                <Button 
-                  onClick={() => handleNavigation('/auth')}
-                  className="w-full bg-black text-white hover:bg-gray-800"
-                >
-                  Sign up
-                </Button>
+                <div className="w-full">
+                  <UserProfile />
+                </div>
               </div>
             </div>
           </div>

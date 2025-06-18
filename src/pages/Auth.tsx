@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Car, Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft, UserCheck, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AuthProps {
   onSkip?: () => void;
@@ -23,10 +23,23 @@ const Auth = ({ onSkip }: AuthProps) => {
     password: '' 
   });
   const navigate = useNavigate();
+  const { login, setGuestMode } = useAuth();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Login:', loginData);
+    
+    // Simulate login - in real app, this would be API call
+    const userData = {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: loginData.email,
+      phone: loginData.phone
+    };
+    
+    login(userData);
+    
     if (onSkip) {
       onSkip();
     } else {
@@ -37,6 +50,18 @@ const Auth = ({ onSkip }: AuthProps) => {
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Signup:', signupData);
+    
+    // Simulate signup - in real app, this would be API call
+    const userData = {
+      id: Date.now().toString(),
+      firstName: signupData.firstName,
+      lastName: signupData.lastName,
+      email: signupData.email,
+      phone: signupData.phone
+    };
+    
+    login(userData);
+    
     if (onSkip) {
       onSkip();
     } else {
@@ -45,6 +70,7 @@ const Auth = ({ onSkip }: AuthProps) => {
   };
 
   const handleSkip = () => {
+    setGuestMode(true);
     if (onSkip) {
       onSkip();
     } else {

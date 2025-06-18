@@ -4,8 +4,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import LoadingScreen from "./components/LoadingScreen";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -23,43 +23,52 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => {
+// Protected Route Component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <>{children}</> : <Navigate to="/auth" replace />;
+};
+
+const AppRoutes = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-      setShowAuth(true);
     }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSkipAuth = () => {
-    setShowAuth(false);
-  };
-
   if (isLoading) {
     return <LoadingScreen />;
   }
 
-  if (showAuth) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <AuthProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Auth onSkip={handleSkipAuth} />
-            </BrowserRouter>
-          </AuthProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  }
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/driver-portal" element={<DriverPortal />} />
+      <Route path="/driver-signup" element={<DriverPortal />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/services" element={<Services />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/careers" element={<Careers />} />
+      <Route path="/business" element={<Business />} />
+      <Route path="/ride-pricing" element={<RidePricing />} />
+      <Route path="/map-explorer" element={<MapExplorer />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -67,22 +76,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/driver-portal" element={<DriverPortal />} />
-              <Route path="/driver-signup" element={<DriverPortal />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/careers" element={<Careers />} />
-              <Route path="/business" element={<Business />} />
-              <Route path="/ride-pricing" element={<RidePricing />} />
-              <Route path="/map-explorer" element={<MapExplorer />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AppRoutes />
           </BrowserRouter>
         </AuthProvider>
       </TooltipProvider>

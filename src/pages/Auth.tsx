@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Car, Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft, UserCheck, X } from "lucide-react";
+import { Car, Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft, UserCheck, X, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -22,23 +22,33 @@ const Auth = ({ onSkip }: AuthProps) => {
     phone: '', 
     password: '' 
   });
+  const [error, setError] = useState('');
+  const [registeredUsers, setRegisteredUsers] = useState<any[]>([]);
   const navigate = useNavigate();
   const { login, setGuestMode } = useAuth();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login:', loginData);
+    setError('');
     
-    // Simulate login - in real app, this would be API call
-    const userData = {
-      id: '1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: loginData.email,
-      phone: loginData.phone
-    };
+    // Check if user exists in registered users
+    const existingUser = registeredUsers.find(user => 
+      (loginMethod === 'email' && user.email === loginData.email) ||
+      (loginMethod === 'phone' && user.phone === loginData.phone)
+    );
     
-    login(userData);
+    if (!existingUser) {
+      setError('Wrong credentials. Please sign up or create an account first.');
+      return;
+    }
+    
+    if (existingUser.password !== loginData.password) {
+      setError('Wrong credentials. Please check your password.');
+      return;
+    }
+    
+    // Login successful
+    login(existingUser);
     
     if (onSkip) {
       onSkip();
@@ -49,23 +59,39 @@ const Auth = ({ onSkip }: AuthProps) => {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Signup:', signupData);
+    setError('');
     
-    // Simulate signup - in real app, this would be API call
+    // Check if user already exists
+    const existingUser = registeredUsers.find(user => 
+      user.email === signupData.email || user.phone === signupData.phone
+    );
+    
+    if (existingUser) {
+      setError('User already exists with this email or phone number.');
+      return;
+    }
+    
+    // Create new user
     const userData = {
       id: Date.now().toString(),
       firstName: signupData.firstName,
       lastName: signupData.lastName,
       email: signupData.email,
-      phone: signupData.phone
+      phone: signupData.phone,
+      password: signupData.password
     };
     
+    // Add to registered users
+    setRegisteredUsers(prev => [...prev, userData]);
+    
+    // Login the user
     login(userData);
     
+    // Redirect to home page after account creation
     if (onSkip) {
       onSkip();
     } else {
-      navigate('/dashboard');
+      navigate('/');
     }
   };
 
@@ -133,6 +159,14 @@ const Auth = ({ onSkip }: AuthProps) => {
             <CardTitle className="text-center text-white">Get Started</CardTitle>
           </CardHeader>
           <CardContent>
+            {/* Error Message */}
+            {error && (
+              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center space-x-2">
+                <AlertCircle className="h-5 w-5 text-red-400" />
+                <p className="text-red-400 text-sm">{error}</p>
+              </div>
+            )}
+
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/10">
                 <TabsTrigger value="login" className="data-[state=active]:bg-white data-[state=active]:text-black text-white">

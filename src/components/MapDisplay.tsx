@@ -22,7 +22,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
 
   useEffect(() => {
     const initializeMap = () => {
-      if (!window.google || !mapRef.current) {
+      if (!window.google || !window.google.maps || !mapRef.current) {
         console.log('Google Maps not loaded or ref not ready');
         return;
       }
@@ -36,13 +36,172 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         zoom: 13,
         center: { lat: 40.7128, lng: -74.0060 }, // Default to NYC
         styles: [
-          // Light theme styles
           {
             "featureType": "all",
+            "elementType": "geometry.fill",
+            "stylers": [
+              {
+                "weight": "2.00"
+              }
+            ]
+          },
+          {
+            "featureType": "all",
+            "elementType": "geometry.stroke",
+            "stylers": [
+              {
+                "color": "#9c9c9c"
+              }
+            ]
+          },
+          {
+            "featureType": "all",
+            "elementType": "labels.text",
+            "stylers": [
+              {
+                "visibility": "on"
+              }
+            ]
+          },
+          {
+            "featureType": "landscape",
             "elementType": "all",
             "stylers": [
-              { "saturation": -10 },
-              { "lightness": 20 }
+              {
+                "color": "#f2f2f2"
+              }
+            ]
+          },
+          {
+            "featureType": "landscape",
+            "elementType": "geometry.fill",
+            "stylers": [
+              {
+                "color": "#ffffff"
+              }
+            ]
+          },
+          {
+            "featureType": "landscape.man_made",
+            "elementType": "geometry.fill",
+            "stylers": [
+              {
+                "color": "#ffffff"
+              }
+            ]
+          },
+          {
+            "featureType": "poi",
+            "elementType": "all",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "all",
+            "stylers": [
+              {
+                "saturation": -100
+              },
+              {
+                "lightness": 45
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "geometry.fill",
+            "stylers": [
+              {
+                "color": "#eeeeee"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#7b7b7b"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+              {
+                "color": "#ffffff"
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "all",
+            "stylers": [
+              {
+                "visibility": "simplified"
+              }
+            ]
+          },
+          {
+            "featureType": "road.arterial",
+            "elementType": "labels.icon",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "transit",
+            "elementType": "all",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "all",
+            "stylers": [
+              {
+                "color": "#46bcec"
+              },
+              {
+                "visibility": "on"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "geometry.fill",
+            "stylers": [
+              {
+                "color": "#c8d7d4"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#070707"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+              {
+                "color": "#ffffff"
+              }
             ]
           }
         ],
@@ -102,7 +261,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
       destination: destination.coordinates,
       travelMode: window.google.maps.TravelMode.DRIVING
     }, (result, status) => {
-      if (status === 'OK' && result && directionsRendererRef.current) {
+      if (status === 'OK' && result && directionsRendererRef.current && mapInstanceRef.current) {
         directionsRendererRef.current.setDirections(result);
         
         const route = result.routes[0];
@@ -115,9 +274,9 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         
         // Fit map to show entire route
         const bounds = new window.google.maps.LatLngBounds();
-        bounds.extend(pickup.coordinates);
-        bounds.extend(destination.coordinates);
-        mapInstanceRef.current?.fitBounds(bounds);
+        bounds.extend(new window.google.maps.LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
+        bounds.extend(new window.google.maps.LatLng(destination.coordinates.lat, destination.coordinates.lng));
+        mapInstanceRef.current.fitBounds(bounds);
       } else {
         console.error('Directions request failed due to ' + status);
       }

@@ -281,11 +281,11 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         
         onRouteCalculated(distance, duration);
         
-        // Fit map to show entire route using proper bounds
-        const bounds = new window.google.maps.LatLngBounds();
-        bounds.extend(new window.google.maps.LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
-        bounds.extend(new window.google.maps.LatLng(destination.coordinates.lat, destination.coordinates.lng));
-        mapInstanceRef.current.fitBounds(bounds);
+        // Fit map to show entire route using type assertions for Google Maps API
+        const bounds = new (window.google.maps as any).LatLngBounds();
+        bounds.extend(new (window.google.maps as any).LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
+        bounds.extend(new (window.google.maps as any).LatLng(destination.coordinates.lat, destination.coordinates.lng));
+        (mapInstanceRef.current as any).fitBounds(bounds);
       } else {
         console.error('Directions request failed due to ' + status);
       }

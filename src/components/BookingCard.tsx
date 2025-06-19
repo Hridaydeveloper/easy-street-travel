@@ -3,6 +3,8 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import LocationSearchInput from "@/components/LocationSearchInput";
 
 interface LocationData {
@@ -32,6 +34,30 @@ const BookingCard: React.FC<BookingCardProps> = ({
   onPickupChange,
   onDestinationChange
 }) => {
+  const navigate = useNavigate();
+  const { isAuthenticated, isGuest } = useAuth();
+
+  const handleFindRides = () => {
+    if (!pickup.coordinates || !destination.coordinates) {
+      return;
+    }
+
+    // If user is guest or not authenticated, redirect to auth page
+    if (isGuest || !isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
+
+    // If authenticated, proceed to ride pricing
+    navigate('/ride-pricing', {
+      state: {
+        pickup,
+        destination,
+        rideType: 'now'
+      }
+    });
+  };
+
   return (
     <Card className="bg-gray-800 border-gray-700">
       <CardHeader>
@@ -66,9 +92,10 @@ const BookingCard: React.FC<BookingCardProps> = ({
         
         <Button 
           disabled={!pickup.coordinates || !destination.coordinates} 
+          onClick={handleFindRides}
           className="w-full bg-white text-black hover:bg-gray-100 py-3 transition-all duration-300"
         >
-          Find Rides
+          {isGuest || !isAuthenticated ? 'Login to See Prices' : 'Find Rides'}
         </Button>
       </CardContent>
     </Card>

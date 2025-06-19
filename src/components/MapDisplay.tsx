@@ -26,33 +26,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
     const mapInstance = new window.google.maps.Map(mapRef.current, {
       zoom: 13,
       center: pickup.coordinates,
-      styles: [
-        {
-          "featureType": "all",
-          "elementType": "geometry",
-          "stylers": [{"color": "#1a1a1a"}]
-        },
-        {
-          "featureType": "all",
-          "elementType": "labels.text.fill",
-          "stylers": [{"color": "#ffffff"}]
-        },
-        {
-          "featureType": "all",
-          "elementType": "labels.text.stroke",
-          "stylers": [{"color": "#1a1a1a"}]
-        },
-        {
-          "featureType": "water",
-          "elementType": "geometry",
-          "stylers": [{"color": "#2563eb"}]
-        },
-        {
-          "featureType": "road",
-          "elementType": "geometry",
-          "stylers": [{"color": "#374151"}]
-        }
-      ]
+      styles: [] // Remove dark theme styles for normal appearance
     });
 
     // Add markers
@@ -118,7 +92,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
   }, [pickup, destination, onRouteCalculated]);
 
   return (
-    <Card className="h-96 lg:h-full bg-gray-800/50 border-gray-700 overflow-hidden">
+    <Card className="h-96 lg:h-full bg-white border-gray-300 overflow-hidden">
       <CardContent className="p-0 h-full">
         <div ref={mapRef} className="w-full h-full rounded-lg" />
       </CardContent>

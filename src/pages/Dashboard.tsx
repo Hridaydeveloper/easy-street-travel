@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
@@ -14,6 +13,7 @@ import RecentRides from "@/components/RecentRides";
 import ProfileTab from "@/components/ProfileTab";
 import SettingsTab from "@/components/SettingsTab";
 import HistoryTab from "@/components/HistoryTab";
+import SearchOptions from "@/components/SearchOptions";
 
 interface LocationData {
   address: string;
@@ -126,14 +126,20 @@ const Dashboard = () => {
                     onRouteCalculated={handleRouteCalculated} 
                   />
                 ) : (
-                  <Card className="h-full bg-gray-800 border-gray-700 flex items-center justify-center">
+                  <Card className="h-full bg-white border-gray-300 flex items-center justify-center">
                     <CardContent className="text-center">
                       <MapPin className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                      <p className="text-gray-400">Select pickup and destination to view map</p>
+                      <p className="text-gray-600">Select pickup and destination to view map</p>
                     </CardContent>
                   </Card>
                 )}
               </div>
+            </div>
+
+            {/* Search Options */}
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-6">Quick Search</h2>
+              <SearchOptions />
             </div>
 
             {/* Quick Stats */}

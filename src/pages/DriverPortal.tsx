@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,10 +6,27 @@ import { Switch } from "@/components/ui/switch";
 import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+interface DriverProfile {
+  name: string;
+  email: string;
+  isLoggedIn: boolean;
+}
+
 const DriverPortal = () => {
   const [isOnline, setIsOnline] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [driverProfile, setDriverProfile] = useState<DriverProfile | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const stored = localStorage.getItem('driverProfile');
+    if (stored) {
+      setDriverProfile(JSON.parse(stored));
+    } else {
+      // Redirect to login if no profile found
+      navigate('/driver-login');
+    }
+  }, [navigate]);
 
   const earnings = {
     today: '$125.50',
@@ -57,7 +73,8 @@ const DriverPortal = () => {
                     <User className="h-8 md:h-10 w-8 md:w-10 text-white" />
                   </div>
                   <div className="text-center md:text-left">
-                    <h2 className="text-xl md:text-2xl font-bold text-white">Mike Johnson</h2>
+                    <h2 className="text-xl md:text-2xl font-bold text-white">{driverProfile?.name || 'Driver'}</h2>
+                    <p className="text-gray-400">{driverProfile?.email || 'driver@example.com'}</p>
                     <p className="text-gray-400">Driver since 2020</p>
                     <div className="flex items-center justify-center md:justify-start space-x-2 mt-2">
                       <Star className="h-5 w-5 text-yellow-500" />
@@ -124,7 +141,7 @@ const DriverPortal = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-white">Driver Dashboard</h1>
-                <p className="text-gray-300">Welcome back, Mike!</p>
+                <p className="text-gray-300">Welcome back, {driverProfile?.name?.split(' ')[0] || 'Driver'}!</p>
               </div>
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
@@ -242,6 +259,10 @@ const DriverPortal = () => {
         );
     }
   };
+
+  if (!driverProfile) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-black flex flex-col md:flex-row relative">

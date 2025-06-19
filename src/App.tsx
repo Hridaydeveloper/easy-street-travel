@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import DriverPortal from "./pages/DriverPortal";
+import DriverLogin from "./pages/DriverLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import Services from "./pages/Services";
 import About from "./pages/About";
@@ -53,6 +54,7 @@ const AppRoutes = () => {
           <Dashboard />
         </ProtectedRoute>
       } />
+      <Route path="/driver-login" element={<DriverLogin />} />
       <Route path="/driver-portal" element={<DriverPortal />} />
       <Route path="/driver-signup" element={<DriverPortal />} />
       <Route path="/admin" element={<AdminDashboard />} />

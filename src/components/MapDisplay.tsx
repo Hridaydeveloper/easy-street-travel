@@ -31,124 +31,43 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         return; // Map already initialized
       }
 
-      // Initialize map with light theme
+      // Initialize map with clean white theme
       mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
         zoom: 13,
         center: { lat: 40.7128, lng: -74.0060 }, // Default to NYC
         styles: [
           {
             "featureType": "all",
-            "elementType": "geometry.fill",
-            "stylers": [
-              {
-                "weight": "2.00"
-              }
-            ]
-          },
-          {
-            "featureType": "all",
-            "elementType": "geometry.stroke",
-            "stylers": [
-              {
-                "color": "#9c9c9c"
-              }
-            ]
-          },
-          {
-            "featureType": "all",
-            "elementType": "labels.text",
-            "stylers": [
-              {
-                "visibility": "on"
-              }
-            ]
-          },
-          {
-            "featureType": "landscape",
-            "elementType": "all",
-            "stylers": [
-              {
-                "color": "#f2f2f2"
-              }
-            ]
-          },
-          {
-            "featureType": "landscape",
-            "elementType": "geometry.fill",
-            "stylers": [
-              {
-                "color": "#ffffff"
-              }
-            ]
-          },
-          {
-            "featureType": "landscape.man_made",
-            "elementType": "geometry.fill",
-            "stylers": [
-              {
-                "color": "#ffffff"
-              }
-            ]
-          },
-          {
-            "featureType": "poi",
-            "elementType": "all",
-            "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "featureType": "road",
-            "elementType": "all",
-            "stylers": [
-              {
-                "saturation": -100
-              },
-              {
-                "lightness": 45
-              }
-            ]
-          },
-          {
-            "featureType": "road",
-            "elementType": "geometry.fill",
-            "stylers": [
-              {
-                "color": "#eeeeee"
-              }
-            ]
-          },
-          {
-            "featureType": "road",
             "elementType": "labels.text.fill",
             "stylers": [
               {
-                "color": "#7b7b7b"
+                "saturation": 36
+              },
+              {
+                "color": "#000000"
+              },
+              {
+                "lightness": 40
               }
             ]
           },
           {
-            "featureType": "road",
+            "featureType": "all",
             "elementType": "labels.text.stroke",
             "stylers": [
               {
-                "color": "#ffffff"
-              }
-            ]
-          },
-          {
-            "featureType": "road.highway",
-            "elementType": "all",
-            "stylers": [
+                "visibility": "on"
+              },
               {
-                "visibility": "simplified"
+                "color": "#ffffff"
+              },
+              {
+                "lightness": 16
               }
             ]
           },
           {
-            "featureType": "road.arterial",
+            "featureType": "all",
             "elementType": "labels.icon",
             "stylers": [
               {
@@ -157,50 +76,140 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
             ]
           },
           {
-            "featureType": "transit",
-            "elementType": "all",
-            "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "featureType": "water",
-            "elementType": "all",
-            "stylers": [
-              {
-                "color": "#46bcec"
-              },
-              {
-                "visibility": "on"
-              }
-            ]
-          },
-          {
-            "featureType": "water",
+            "featureType": "administrative",
             "elementType": "geometry.fill",
             "stylers": [
               {
-                "color": "#c8d7d4"
+                "color": "#fefefe"
+              },
+              {
+                "lightness": 20
               }
             ]
           },
           {
-            "featureType": "water",
-            "elementType": "labels.text.fill",
+            "featureType": "administrative",
+            "elementType": "geometry.stroke",
             "stylers": [
               {
-                "color": "#070707"
+                "color": "#fefefe"
+              },
+              {
+                "lightness": 17
+              },
+              {
+                "weight": 1.2
               }
             ]
           },
           {
-            "featureType": "water",
-            "elementType": "labels.text.stroke",
+            "featureType": "landscape",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#f5f5f5"
+              },
+              {
+                "lightness": 20
+              }
+            ]
+          },
+          {
+            "featureType": "poi",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#f5f5f5"
+              },
+              {
+                "lightness": 21
+              }
+            ]
+          },
+          {
+            "featureType": "poi.park",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#dedede"
+              },
+              {
+                "lightness": 21
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "geometry.fill",
             "stylers": [
               {
                 "color": "#ffffff"
+              },
+              {
+                "lightness": 17
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "geometry.stroke",
+            "stylers": [
+              {
+                "color": "#ffffff"
+              },
+              {
+                "lightness": 29
+              },
+              {
+                "weight": 0.2
+              }
+            ]
+          },
+          {
+            "featureType": "road.arterial",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#ffffff"
+              },
+              {
+                "lightness": 18
+              }
+            ]
+          },
+          {
+            "featureType": "road.local",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#ffffff"
+              },
+              {
+                "lightness": 16
+              }
+            ]
+          },
+          {
+            "featureType": "transit",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#f2f2f2"
+              },
+              {
+                "lightness": 19
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#e9e9e9"
+              },
+              {
+                "lightness": 17
               }
             ]
           }
@@ -272,11 +281,11 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         
         onRouteCalculated(distance, duration);
         
-        // Fit map to show entire route
-        const bounds = new window.google.maps.LatLngBounds();
-        bounds.extend(new window.google.maps.LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
-        bounds.extend(new window.google.maps.LatLng(destination.coordinates.lat, destination.coordinates.lng));
-        mapInstanceRef.current.fitBounds(bounds);
+        // Fit map to show entire route using proper Google Maps API access
+        const bounds = new (window.google.maps as any).LatLngBounds();
+        bounds.extend(new (window.google.maps as any).LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
+        bounds.extend(new (window.google.maps as any).LatLng(destination.coordinates.lat, destination.coordinates.lng));
+        (mapInstanceRef.current as any).fitBounds(bounds);
       } else {
         console.error('Directions request failed due to ' + status);
       }

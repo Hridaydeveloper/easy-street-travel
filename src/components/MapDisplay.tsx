@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 
 interface LocationData {
@@ -16,69 +16,94 @@ interface MapDisplayProps {
 
 const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCalculated }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const directionsRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
+  const [isMapReady, setIsMapReady] = useState(false);
 
   useEffect(() => {
-    if (!window.google || !mapRef.current || !pickup.coordinates || !destination.coordinates) {
-      console.log('Google Maps not loaded or coordinates missing');
+    const initializeMap = () => {
+      if (!window.google || !mapRef.current) {
+        console.log('Google Maps not loaded or ref not ready');
+        return;
+      }
+
+      if (mapInstanceRef.current) {
+        return; // Map already initialized
+      }
+
+      // Initialize map with light theme
+      mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
+        zoom: 13,
+        center: { lat: 40.7128, lng: -74.0060 }, // Default to NYC
+        styles: [
+          // Light theme styles
+          {
+            "featureType": "all",
+            "elementType": "all",
+            "stylers": [
+              { "saturation": -10 },
+              { "lightness": 20 }
+            ]
+          }
+        ],
+        mapTypeControl: true,
+        streetViewControl: true,
+        fullscreenControl: true,
+        zoomControl: true
+      });
+
+      setIsMapReady(true);
+      console.log('Map initialized successfully');
+    };
+
+    // Check if Google Maps is loaded
+    if (window.google && window.google.maps) {
+      initializeMap();
+    } else {
+      // Wait for Google Maps to load
+      const checkGoogleMaps = setInterval(() => {
+        if (window.google && window.google.maps) {
+          clearInterval(checkGoogleMaps);
+          initializeMap();
+        }
+      }, 100);
+
+      return () => clearInterval(checkGoogleMaps);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isMapReady || !mapInstanceRef.current || !pickup.coordinates || !destination.coordinates) {
       return;
     }
 
-    const mapInstance = new window.google.maps.Map(mapRef.current, {
-      zoom: 13,
-      center: pickup.coordinates,
-      styles: [] // Remove dark theme styles for normal appearance
-    });
+    // Clear existing markers and directions
+    if (directionsRendererRef.current) {
+      directionsRendererRef.current.setMap(null);
+    }
 
-    // Add markers
-    new window.google.maps.Marker({
-      position: pickup.coordinates,
-      map: mapInstance,
-      title: 'Pickup Location',
-      icon: {
-        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="15" fill="#10B981"/>
-            <circle cx="20" cy="20" r="8" fill="white"/>
-          </svg>
-        `),
-        scaledSize: new window.google.maps.Size(40, 40)
-      }
-    });
-
-    new window.google.maps.Marker({
-      position: destination.coordinates,
-      map: mapInstance,
-      title: 'Destination',
-      icon: {
-        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="15" fill="#EF4444"/>
-            <circle cx="20" cy="20" r="8" fill="white"/>
-          </svg>
-        `),
-        scaledSize: new window.google.maps.Size(40, 40)
-      }
-    });
-
-    // Calculate route
-    const directionsService = new window.google.maps.DirectionsService();
-    const directionsRenderer = new window.google.maps.DirectionsRenderer({
-      suppressMarkers: true,
+    // Create new directions renderer
+    directionsRendererRef.current = new window.google.maps.DirectionsRenderer({
+      suppressMarkers: false,
       polylineOptions: {
         strokeColor: '#3B82F6',
-        strokeWeight: 5
+        strokeWeight: 4,
+        strokeOpacity: 0.8
       }
     });
 
-    directionsRenderer.setMap(mapInstance);
+    directionsRendererRef.current.setMap(mapInstanceRef.current);
+
+    // Calculate and display route
+    const directionsService = new window.google.maps.DirectionsService();
 
     directionsService.route({
       origin: pickup.coordinates,
       destination: destination.coordinates,
       travelMode: window.google.maps.TravelMode.DRIVING
     }, (result, status) => {
-      if (status === 'OK' && result) {
-        directionsRenderer.setDirections(result);
+      if (status === 'OK' && result && directionsRendererRef.current) {
+        directionsRendererRef.current.setDirections(result);
         
         const route = result.routes[0];
         const leg = route.legs[0];
@@ -87,14 +112,31 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         const duration = leg.duration?.text || '';
         
         onRouteCalculated(distance, duration);
+        
+        // Fit map to show entire route
+        const bounds = new window.google.maps.LatLngBounds();
+        bounds.extend(pickup.coordinates);
+        bounds.extend(destination.coordinates);
+        mapInstanceRef.current?.fitBounds(bounds);
+      } else {
+        console.error('Directions request failed due to ' + status);
       }
     });
-  }, [pickup, destination, onRouteCalculated]);
+  }, [pickup, destination, onRouteCalculated, isMapReady]);
 
   return (
     <Card className="h-96 lg:h-full bg-white border-gray-300 overflow-hidden">
       <CardContent className="p-0 h-full">
-        <div ref={mapRef} className="w-full h-full rounded-lg" />
+        <div 
+          ref={mapRef} 
+          className="w-full h-full rounded-lg"
+          style={{ minHeight: '300px' }}
+        />
+        {!isMapReady && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+            <div className="text-gray-600">Loading map...</div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

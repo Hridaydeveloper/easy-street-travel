@@ -17,7 +17,7 @@ const Navigation = () => {
           <div className="flex items-center">
             <button onClick={() => handleNavigation('/')} className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
               
-              <span className="text-xl font-bold text-black">Uber</span>
+              <span className="font-bold text-black text-3xl">Uber</span>
             </button>
           </div>
 

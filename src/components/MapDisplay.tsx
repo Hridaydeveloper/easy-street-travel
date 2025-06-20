@@ -108,11 +108,11 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         
         onRouteCalculated(distance, duration);
         
-        // Fit map to show entire route with some padding
-        const bounds = new window.google.maps.LatLngBounds();
-        bounds.extend(new window.google.maps.LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
-        bounds.extend(new window.google.maps.LatLng(destination.coordinates.lat, destination.coordinates.lng));
-        mapInstanceRef.current.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
+        // Fit map to show entire route with some padding using type assertions
+        const bounds = new (window.google.maps as any).LatLngBounds();
+        bounds.extend(new (window.google.maps as any).LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
+        bounds.extend(new (window.google.maps as any).LatLng(destination.coordinates.lat, destination.coordinates.lng));
+        (mapInstanceRef.current as any).fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
       } else {
         console.error('Directions request failed due to ' + status);
       }

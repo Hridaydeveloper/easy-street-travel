@@ -35,13 +35,27 @@ const RideOptionCard: React.FC<RideOptionCardProps> = ({ option, price, onBook }
       Math.sqrt(
         Math.pow(destination.coordinates.lat - pickup.coordinates.lat, 2) + 
         Math.pow(destination.coordinates.lng - pickup.coordinates.lng, 2)
-      ) * 69 : 0; // Rough distance calculation
+      ) * 69 : 0;
+
+    // Create a serializable version of the ride option without React elements
+    const serializableRideOption = {
+      id: option.id,
+      name: option.name,
+      description: option.description,
+      basePrice: option.basePrice,
+      pricePerMile: option.pricePerMile,
+      pricePerMinute: option.pricePerMinute,
+      estimatedTime: option.estimatedTime,
+      features: option.features,
+      rating: option.rating,
+      passengerCount: option.passengerCount
+    };
 
     navigate('/payment', {
       state: {
         pickup,
         destination,
-        rideOption: option,
+        rideOption: serializableRideOption,
         price: price || 0,
         distance,
         duration: option.estimatedTime

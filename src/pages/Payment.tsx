@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ArrowLeft, MapPin, CreditCard, DollarSign, Clock, User, Phone, Mail } from "lucide-react";
+import { ArrowLeft, MapPin, CreditCard, DollarSign, Clock, User, Phone, Mail, Car, Users, Crown } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -41,11 +41,24 @@ const Payment = () => {
   const handlePayment = async () => {
     setIsBooking(true);
     
-    // Simulate booking process
     setTimeout(() => {
       setIsBooking(false);
       setIsBooked(true);
     }, 2000);
+  };
+
+  // Get the appropriate icon based on ride option
+  const getRideIcon = (rideOptionId: string) => {
+    switch (rideOptionId) {
+      case 'uberx':
+        return <Car className="h-8 w-8" />;
+      case 'uberxl':
+        return <Users className="h-8 w-8" />;
+      case 'uberblack':
+        return <Crown className="h-8 w-8" />;
+      default:
+        return <Car className="h-8 w-8" />;
+    }
   };
 
   if (isBooked) {
@@ -204,7 +217,7 @@ const Payment = () => {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    {rideDetails.rideOption?.icon}
+                    {getRideIcon(rideDetails.rideOption?.id)}
                     <div>
                       <h3 className="font-semibold text-black">{rideDetails.rideOption?.name}</h3>
                       <p className="text-sm text-gray-500">{rideDetails.rideOption?.description}</p>

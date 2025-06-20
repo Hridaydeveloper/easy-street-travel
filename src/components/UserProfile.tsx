@@ -74,6 +74,9 @@ const UserProfile: React.FC = () => {
             <p className="text-xs leading-none text-muted-foreground">
               {user?.email}
             </p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user?.phone || '+1 (555) 123-4567'}
+            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

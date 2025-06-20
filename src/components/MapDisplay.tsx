@@ -21,27 +21,17 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
   const directionsServiceRef = useRef<google.maps.DirectionsService | null>(null);
   const [isMapReady, setIsMapReady] = useState(false);
   const [directionsLoaded, setDirectionsLoaded] = useState(false);
-
-  // Memoize coordinates to prevent unnecessary re-renders
-  const pickupKey = pickup.coordinates ? `${pickup.coordinates.lat},${pickup.coordinates.lng}` : '';
-  const destinationKey = destination.coordinates ? `${destination.coordinates.lat},${destination.coordinates.lng}` : '';
-  const routeKey = `${pickupKey}-${destinationKey}`;
+  const [routeCalculated, setRouteCalculated] = useState(false);
 
   useEffect(() => {
     const initializeMap = () => {
-      if (!window.google || !window.google.maps || !mapRef.current) {
-        console.log('Google Maps not loaded or ref not ready');
+      if (!window.google || !window.google.maps || !mapRef.current || mapInstanceRef.current) {
         return;
       }
 
-      if (mapInstanceRef.current) {
-        return; // Map already initialized
-      }
-
-      // Initialize map with proper zoom controls
       mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
         zoom: 13,
-        center: { lat: 40.7128, lng: -74.0060 }, // Default to NYC
+        center: { lat: 40.7128, lng: -74.0060 },
         mapTypeControl: true,
         streetViewControl: true,
         fullscreenControl: true,
@@ -54,42 +44,36 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         keyboardShortcuts: true
       });
 
-      // Initialize directions service
       directionsServiceRef.current = new window.google.maps.DirectionsService();
-
       setIsMapReady(true);
-      console.log('Map initialized successfully with zoom controls');
+      console.log('Map initialized successfully');
     };
 
-    // Check if Google Maps is loaded
     if (window.google && window.google.maps) {
       initializeMap();
     } else {
-      // Wait for Google Maps to load
       const checkGoogleMaps = setInterval(() => {
         if (window.google && window.google.maps) {
           clearInterval(checkGoogleMaps);
           initializeMap();
         }
       }, 100);
-
       return () => clearInterval(checkGoogleMaps);
     }
   }, []);
 
-  const calculateAndDisplayRoute = useCallback(() => {
+  const calculateRoute = useCallback(() => {
     if (!isMapReady || !mapInstanceRef.current || !directionsServiceRef.current || 
-        !pickup.coordinates || !destination.coordinates) {
+        !pickup.coordinates || !destination.coordinates || routeCalculated) {
       return;
     }
 
-    // Clean up previous directions renderer
+    // Clean up previous renderer
     if (directionsRendererRef.current) {
       directionsRendererRef.current.setMap(null);
-      directionsRendererRef.current = null;
     }
 
-    // Create new directions renderer
+    // Create new renderer
     directionsRendererRef.current = new window.google.maps.DirectionsRenderer({
       suppressMarkers: false,
       preserveViewport: false,
@@ -98,15 +82,11 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         strokeWeight: 5,
         strokeOpacity: 1.0,
         geodesic: true
-      },
-      markerOptions: {
-        draggable: false
       }
     });
     
     directionsRendererRef.current.setMap(mapInstanceRef.current);
 
-    // Calculate route
     directionsServiceRef.current.route({
       origin: pickup.coordinates,
       destination: destination.coordinates,
@@ -115,43 +95,36 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
       avoidTolls: false
     }, (result, status) => {
       if (status === 'OK' && result && directionsRendererRef.current) {
-        try {
-          // Set the directions
-          directionsRendererRef.current.setDirections(result);
-          
-          const route = result.routes[0];
-          const leg = route.legs[0];
-          
-          const distance = leg.distance?.value ? leg.distance.value / 1609.34 : 0;
-          const duration = leg.duration?.text || '';
-          
-          onRouteCalculated(distance, duration);
-          setDirectionsLoaded(true);
-          
-          console.log('Route calculated successfully:', { distance: distance.toFixed(1), duration });
-        } catch (error) {
-          console.error('Error setting directions:', error);
-        }
+        directionsRendererRef.current.setDirections(result);
+        
+        const route = result.routes[0];
+        const leg = route.legs[0];
+        
+        const distance = leg.distance?.value ? leg.distance.value / 1609.34 : 0;
+        const duration = leg.duration?.text || '';
+        
+        onRouteCalculated(distance, duration);
+        setDirectionsLoaded(true);
+        setRouteCalculated(true);
+        
+        console.log('Route calculated successfully:', { distance: distance.toFixed(1), duration });
       } else {
         console.error('Directions request failed:', status);
         setDirectionsLoaded(false);
       }
     });
-  }, [pickup.coordinates, destination.coordinates, isMapReady, onRouteCalculated]);
+  }, [pickup.coordinates, destination.coordinates, isMapReady, onRouteCalculated, routeCalculated]);
 
-  // Effect to calculate route when coordinates change
   useEffect(() => {
-    if (pickup.coordinates && destination.coordinates && isMapReady) {
-      // Small delay to ensure map is fully ready
+    if (pickup.coordinates && destination.coordinates && isMapReady && !routeCalculated) {
       const timer = setTimeout(() => {
-        calculateAndDisplayRoute();
-      }, 100);
+        calculateRoute();
+      }, 500);
       
       return () => clearTimeout(timer);
     }
-  }, [routeKey, calculateAndDisplayRoute, isMapReady]);
+  }, [calculateRoute, pickup.coordinates, destination.coordinates, isMapReady, routeCalculated]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (directionsRendererRef.current) {

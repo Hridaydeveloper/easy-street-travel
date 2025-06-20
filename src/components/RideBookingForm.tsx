@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LocationSearchInput from './LocationSearchInput';
+import { useAuth } from "@/contexts/AuthContext";
 
 interface LocationData {
   address: string;
@@ -13,6 +14,7 @@ interface LocationData {
 
 const RideBookingForm = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, isGuest } = useAuth();
   const [pickup, setPickup] = useState<LocationData>({ address: '' });
   const [destination, setDestination] = useState<LocationData>({ address: '' });
   const [rideType, setRideType] = useState('now');
@@ -31,6 +33,12 @@ const RideBookingForm = () => {
       return;
     }
 
+    // If user is guest or not authenticated, redirect to auth page
+    if (isGuest || !isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
+
     console.log('Booking ride:', {
       pickup,
       destination,
@@ -45,6 +53,17 @@ const RideBookingForm = () => {
         rideType
       }
     });
+  };
+
+  const handleScheduleLater = () => {
+    // If user is guest or not authenticated, redirect to auth page
+    if (isGuest || !isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
+
+    // Handle schedule for later functionality
+    console.log('Schedule for later clicked');
   };
 
   return (
@@ -89,13 +108,14 @@ const RideBookingForm = () => {
           onClick={handleBookRide} 
           className="flex-1 bg-white text-black hover:bg-gray-200 font-semibold py-3 transition-all duration-300 transform hover:scale-105"
         >
-          See prices
+          {isGuest || !isAuthenticated ? 'Login to See Prices' : 'See prices'}
         </Button>
         <Button 
           variant="outline" 
+          onClick={handleScheduleLater}
           className="px-6 bg-white text-black border-white hover:bg-white hover:text-black transition-all duration-300"
         >
-          Schedule for later
+          {isGuest || !isAuthenticated ? 'Login to Schedule' : 'Schedule for later'}
         </Button>
       </div>
     </div>

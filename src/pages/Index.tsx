@@ -6,8 +6,12 @@ import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import RideBookingForm from "@/components/RideBookingForm";
 import Footer from "@/components/Footer";
+import { useAuth } from "@/contexts/AuthContext";
+
 const Index = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, isGuest } = useAuth();
+
   const features = [{
     icon: <Car className="h-12 w-12 text-white" />,
     title: "Ride Options",
@@ -28,6 +32,7 @@ const Index = () => {
     image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_552,w_552/v1689609697/assets/b8/c39de0-6e13-485b-ba45-66511170c62a/original/SS_Commuter.jpg"
   }];
   const benefits = ["One tap to request", "Upfront pricing", "24/7 reliable service", "Safe and secure rides"];
+
   return <div className="min-h-screen bg-black text-white">
       <Navigation />
       
@@ -237,26 +242,29 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gray-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-black opacity-50"></div>
-        <div className="relative container mx-auto px-4 text-center">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white">Ready to get started?</h2>
-          <p className="text-xl mb-10 max-w-2xl mx-auto text-gray-400 leading-relaxed">
-            Join millions of users who trust our platform for their daily commute and travel needs.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button onClick={() => navigate('/auth')} className="bg-white text-black hover:bg-gray-200 px-10 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
-              Sign up as Rider
-            </Button>
-            <Button onClick={() => navigate('/driver-signup')} className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-10 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
-              Become a Driver
-            </Button>
+      {/* CTA Section - Only show for guests or non-authenticated users */}
+      {(isGuest || !isAuthenticated) && (
+        <section className="py-20 bg-gray-900 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-black opacity-50"></div>
+          <div className="relative container mx-auto px-4 text-center">
+            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white">Ready to get started?</h2>
+            <p className="text-xl mb-10 max-w-2xl mx-auto text-gray-400 leading-relaxed">
+              Join millions of users who trust our platform for their daily commute and travel needs.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Button onClick={() => navigate('/auth')} className="bg-white text-black hover:bg-gray-200 px-10 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
+                Sign up as Rider
+              </Button>
+              <Button onClick={() => navigate('/driver-signup')} className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-10 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
+                Become a Driver
+              </Button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <Footer />
     </div>;
 };
+
 export default Index;

@@ -81,6 +81,7 @@ const AppRoutes = () => {
       <Route path="/careers" element={<Careers />} />
       <Route path="/business" element={<Business />} />
       <Route path="/ride-pricing" element={<RidePricing />} />
+      <Route path="/payment" element={<Payment />} />
       <Route path="/map-explorer" element={<MapExplorer />} />
       
       {/* Company pages */}

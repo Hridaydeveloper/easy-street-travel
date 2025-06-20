@@ -38,7 +38,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         return; // Map already initialized
       }
 
-      // Initialize map
+      // Initialize map with proper zoom controls
       mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
         zoom: 13,
         center: { lat: 40.7128, lng: -74.0060 }, // Default to NYC
@@ -46,14 +46,19 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         streetViewControl: true,
         fullscreenControl: true,
         zoomControl: true,
-        styles: []
+        scrollwheel: true,
+        disableDoubleClickZoom: false,
+        gestureHandling: 'auto',
+        styles: [],
+        clickableIcons: true,
+        keyboardShortcuts: true
       });
 
       // Initialize directions service
       directionsServiceRef.current = new window.google.maps.DirectionsService();
 
       setIsMapReady(true);
-      console.log('Map initialized successfully');
+      console.log('Map initialized successfully with zoom controls');
     };
 
     // Check if Google Maps is loaded
@@ -78,23 +83,28 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
       return;
     }
 
-    // Only initialize directions renderer once
-    if (!directionsRendererRef.current) {
-      directionsRendererRef.current = new window.google.maps.DirectionsRenderer({
-        suppressMarkers: false,
-        preserveViewport: false,
-        polylineOptions: {
-          strokeColor: '#4285F4',
-          strokeWeight: 5,
-          strokeOpacity: 0.8,
-          geodesic: true
-        },
-        markerOptions: {
-          draggable: false
-        }
-      });
-      directionsRendererRef.current.setMap(mapInstanceRef.current);
+    // Clean up previous directions renderer
+    if (directionsRendererRef.current) {
+      directionsRendererRef.current.setMap(null);
+      directionsRendererRef.current = null;
     }
+
+    // Create new directions renderer
+    directionsRendererRef.current = new window.google.maps.DirectionsRenderer({
+      suppressMarkers: false,
+      preserveViewport: false,
+      polylineOptions: {
+        strokeColor: '#1a73e8',
+        strokeWeight: 5,
+        strokeOpacity: 1.0,
+        geodesic: true
+      },
+      markerOptions: {
+        draggable: false
+      }
+    });
+    
+    directionsRendererRef.current.setMap(mapInstanceRef.current);
 
     // Calculate route
     directionsServiceRef.current.route({

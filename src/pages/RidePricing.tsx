@@ -111,14 +111,14 @@ const RidePricing = () => {
 
   if (!pickup || !destination) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-black"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-white text-black">
       <Navigation />
       
       <div className="pt-16">
@@ -140,23 +140,27 @@ const RidePricing = () => {
             </div>
 
             <div className="order-1 lg:order-2 space-y-6">
-              <div className="text-center lg:text-left">
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
+              <div className="text-center lg:text-left px-2">
+                <h2 className="text-3xl font-bold text-black mb-2">
                   Choose Your Ride
                 </h2>
-                <p className="text-gray-400">Premium transportation options for every need</p>
+                <p className="text-gray-600">Premium transportation options for every need</p>
               </div>
               
-              {rideOptions.map((option) => (
-                <RideOptionCard
-                  key={option.id}
-                  option={option}
-                  price={prices[option.id]}
-                  onBook={handleBookRide}
-                />
-              ))}
+              <div className="space-y-4 px-2">
+                {rideOptions.map((option) => (
+                  <RideOptionCard
+                    key={option.id}
+                    option={option}
+                    price={prices[option.id]}
+                    onBook={handleBookRide}
+                  />
+                ))}
+              </div>
 
-              <SafetyFeatures />
+              <div className="px-2">
+                <SafetyFeatures />
+              </div>
             </div>
           </div>
         </div>

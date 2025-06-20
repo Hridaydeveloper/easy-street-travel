@@ -19,6 +19,7 @@ import Contact from "./pages/Contact";
 import Careers from "./pages/Careers";
 import Business from "./pages/Business";
 import RidePricing from "./pages/RidePricing";
+import Payment from "./pages/Payment";
 import MapExplorer from "./pages/MapExplorer";
 import NotFound from "./pages/NotFound";
 // Company pages

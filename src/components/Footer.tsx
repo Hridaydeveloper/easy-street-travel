@@ -38,7 +38,7 @@ const Footer = () => {
       title: "Company",
       links: [
         { name: "About Us", action: () => scrollToSection('about') },
-        { name: "Our Team", action: () => scrollToSection('about') },
+        { name: "Our Team", action: () => navigate('/our-team') },
         { name: "Careers", action: () => navigate('/careers') },
         { name: "Press", action: () => navigate('/press') }
       ]
@@ -46,8 +46,8 @@ const Footer = () => {
     {
       title: "Products", 
       links: [
-        { name: "Ride", action: () => navigate('/') },
-        { name: "Drive", action: () => navigate('/driver-portal') },
+        { name: "Ride", action: () => navigate('/ride') },
+        { name: "Drive", action: () => navigate('/drive') },
         { name: "Business", action: () => navigate('/business') },
         { name: "Freight", action: () => navigate('/freight') }
       ]

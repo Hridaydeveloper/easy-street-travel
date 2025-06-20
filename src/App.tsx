@@ -21,6 +21,23 @@ import Business from "./pages/Business";
 import RidePricing from "./pages/RidePricing";
 import MapExplorer from "./pages/MapExplorer";
 import NotFound from "./pages/NotFound";
+// Company pages
+import OurTeam from "./pages/OurTeam";
+import Press from "./pages/Press";
+// Product pages
+import Ride from "./pages/Ride";
+import Drive from "./pages/Drive";
+import Freight from "./pages/Freight";
+// Global citizenship pages
+import Safety from "./pages/Safety";
+import Diversity from "./pages/Diversity";
+import Transparency from "./pages/Transparency";
+import Sustainability from "./pages/Sustainability";
+// Travel pages
+import Airports from "./pages/Airports";
+import Cities from "./pages/Cities";
+import Estimates from "./pages/Estimates";
+import GiftCards from "./pages/GiftCards";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +82,28 @@ const AppRoutes = () => {
       <Route path="/business" element={<Business />} />
       <Route path="/ride-pricing" element={<RidePricing />} />
       <Route path="/map-explorer" element={<MapExplorer />} />
+      
+      {/* Company pages */}
+      <Route path="/our-team" element={<OurTeam />} />
+      <Route path="/press" element={<Press />} />
+      
+      {/* Product pages */}
+      <Route path="/ride" element={<Ride />} />
+      <Route path="/drive" element={<Drive />} />
+      <Route path="/freight" element={<Freight />} />
+      
+      {/* Global citizenship pages */}
+      <Route path="/safety" element={<Safety />} />
+      <Route path="/diversity" element={<Diversity />} />
+      <Route path="/transparency" element={<Transparency />} />
+      <Route path="/sustainability" element={<Sustainability />} />
+      
+      {/* Travel pages */}
+      <Route path="/airports" element={<Airports />} />
+      <Route path="/cities" element={<Cities />} />
+      <Route path="/estimates" element={<Estimates />} />
+      <Route path="/gift-cards" element={<GiftCards />} />
+      
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

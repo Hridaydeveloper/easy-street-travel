@@ -38,7 +38,8 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         mapTypeControl: true,
         streetViewControl: true,
         fullscreenControl: true,
-        zoomControl: true
+        zoomControl: true,
+        styles: [] // Normal Google Maps styling
       });
 
       setIsMapReady(true);
@@ -66,18 +67,21 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
       return;
     }
 
-    // Clear existing markers and directions
+    // Clear existing directions
     if (directionsRendererRef.current) {
       directionsRendererRef.current.setMap(null);
     }
 
-    // Create new directions renderer
+    // Create new directions renderer with visible route line
     directionsRendererRef.current = new window.google.maps.DirectionsRenderer({
       suppressMarkers: false,
       polylineOptions: {
-        strokeColor: '#3B82F6',
-        strokeWeight: 4,
+        strokeColor: '#4285F4', // Google Blue
+        strokeWeight: 5,
         strokeOpacity: 0.8
+      },
+      markerOptions: {
+        draggable: false
       }
     });
 
@@ -89,7 +93,9 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
     directionsService.route({
       origin: pickup.coordinates,
       destination: destination.coordinates,
-      travelMode: window.google.maps.TravelMode.DRIVING
+      travelMode: window.google.maps.TravelMode.DRIVING,
+      avoidHighways: false,
+      avoidTolls: false
     }, (result, status) => {
       if (status === 'OK' && result && directionsRendererRef.current && mapInstanceRef.current) {
         directionsRendererRef.current.setDirections(result);
@@ -102,11 +108,11 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ pickup, destination, onRouteCal
         
         onRouteCalculated(distance, duration);
         
-        // Fit map to show entire route
-        const bounds = new (window.google.maps as any).LatLngBounds();
-        bounds.extend(new (window.google.maps as any).LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
-        bounds.extend(new (window.google.maps as any).LatLng(destination.coordinates.lat, destination.coordinates.lng));
-        (mapInstanceRef.current as any).fitBounds(bounds);
+        // Fit map to show entire route with some padding
+        const bounds = new window.google.maps.LatLngBounds();
+        bounds.extend(new window.google.maps.LatLng(pickup.coordinates.lat, pickup.coordinates.lng));
+        bounds.extend(new window.google.maps.LatLng(destination.coordinates.lat, destination.coordinates.lng));
+        mapInstanceRef.current.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
       } else {
         console.error('Directions request failed due to ' + status);
       }

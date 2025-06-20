@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -104,7 +105,17 @@ const DriverPortal = () => {
       case 'settings':
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-white">Settings</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl md:text-3xl font-bold text-white">Settings</h1>
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/')}
+                className="text-white border-white hover:bg-white hover:text-black transition-all duration-300 bg-white/10"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Home
+              </Button>
+            </div>
             <Card className="bg-gray-800 border-gray-700">
               <CardContent className="p-4 md:p-6 space-y-6">
                 <div className="space-y-4">
@@ -317,16 +328,19 @@ const DriverPortal = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 md:p-6 border-t border-gray-700">
-          <Button 
-            variant="outline" 
-            onClick={() => navigate('/')}
-            className="w-full justify-start text-white border-white hover:bg-white hover:text-black transition-all duration-300 bg-white/10 font-semibold text-sm md:text-base py-2 md:py-3"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Home
-          </Button>
-        </div>
+        {/* Only show back to home button for non-settings tabs */}
+        {activeTab !== 'settings' && (
+          <div className="absolute bottom-0 w-full p-4 md:p-6 border-t border-gray-700">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/')}
+              className="w-full justify-start text-white border-white hover:bg-white hover:text-black transition-all duration-300 bg-white/10 font-semibold text-sm md:text-base py-2 md:py-3"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Home
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Main Content */}

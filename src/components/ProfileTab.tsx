@@ -8,7 +8,7 @@ const ProfileTab: React.FC = () => {
     user
   } = useAuth();
   return <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-slate-100">Profile</h1>
+      <h1 className="text-3xl font-bold text-zinc-950">Profile</h1>
       <Card className="bg-gray-800 border-gray-700">
         <CardContent className="p-6">
           <div className="flex items-center space-x-6 mb-6">

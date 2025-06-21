@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
@@ -99,26 +100,28 @@ const Dashboard = () => {
     switch (activeTab) {
       case 'home':
         return (
-          <div className="space-y-8">
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-2">
+          <div className="space-y-6 px-2 sm:px-0">
+            <div className="text-center sm:text-left">
+              <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 Welcome back, {user?.firstName || 'User'}!
               </h1>
-              <p className="text-gray-400">Ready for your next ride?</p>
+              <p className="text-gray-600">Ready for your next ride?</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Booking Card */}
-              <BookingCard
-                pickup={pickup}
-                destination={destination}
-                routeInfo={routeInfo}
-                onPickupChange={handlePickupChange}
-                onDestinationChange={handleDestinationChange}
-              />
+              <div className="order-1">
+                <BookingCard
+                  pickup={pickup}
+                  destination={destination}
+                  routeInfo={routeInfo}
+                  onPickupChange={handlePickupChange}
+                  onDestinationChange={handleDestinationChange}
+                />
+              </div>
 
               {/* Map Display */}
-              <div className="h-96">
+              <div className="order-2 h-96">
                 {pickup.coordinates && destination.coordinates ? (
                   <MapDisplay 
                     pickup={pickup} 
@@ -136,9 +139,27 @@ const Dashboard = () => {
               </div>
             </div>
 
+            {/* Current Ride Status */}
+            <Card className="bg-white border-gray-300">
+              <CardContent className="p-6">
+                <h2 className="text-xl font-bold text-black mb-4">Current Ride</h2>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-black">Your ride is arriving!</p>
+                      <p className="text-sm text-gray-600">Estimated arrival: 3-5 minutes</p>
+                    </div>
+                    <div className="text-green-600 font-bold text-lg">
+                      Active
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Search Options */}
             <div>
-              <h2 className="text-2xl font-bold text-white mb-6">Quick Search</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-black mb-4">Quick Search</h2>
               <SearchOptions />
             </div>
 
@@ -162,7 +183,7 @@ const Dashboard = () => {
 
   return (
     <GoogleMapsLoader>
-      <div className="min-h-screen bg-gray-900">
+      <div className="min-h-screen bg-white">
         {/* Add Navigation Bar */}
         <Navigation />
         
@@ -171,13 +192,10 @@ const Dashboard = () => {
           <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
           {/* Main Content */}
-          <div className="flex-1 p-8 bg-gray-900">
+          <div className="flex-1 p-4 sm:p-8 bg-white overflow-x-hidden">
             {renderContent()}
           </div>
         </div>
       </div>
     </GoogleMapsLoader>
   );
-};
-
-export default Dashboard;

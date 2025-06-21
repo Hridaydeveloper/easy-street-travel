@@ -66,7 +66,7 @@ const Payment = () => {
       <div className="min-h-screen bg-white">
         <Navigation />
         
-        <div className="pt-16 container mx-auto p-4">
+        <div className="pt-20 pb-8 container mx-auto p-4 min-h-screen flex items-center justify-center">
           <div className="max-w-md mx-auto text-center space-y-6">
             <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto">
               <div className="w-8 h-8 border-2 border-white rounded-full flex items-center justify-center">

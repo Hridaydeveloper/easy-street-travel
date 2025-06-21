@@ -131,7 +131,7 @@ const RidePricing = () => {
 
         <div className="container mx-auto p-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Mobile Map - Show above content on small screens */}
+            {/* Mobile Map - Show above Choose Your Ride heading on small screens */}
             <div className="lg:hidden order-1 mb-6">
               <MapDisplay
                 pickup={pickup}
@@ -177,3 +177,6 @@ const RidePricing = () => {
       </div>
     </div>
   );
+};
+
+export default RidePricing;

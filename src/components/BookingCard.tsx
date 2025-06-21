@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import { MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import LocationSearchInput from "@/components/LocationSearchInput";
+
 interface LocationData {
   address: string;
   placeId?: string;
@@ -13,6 +15,7 @@ interface LocationData {
     lng: number;
   };
 }
+
 interface BookingCardProps {
   pickup: LocationData;
   destination: LocationData;
@@ -29,6 +32,7 @@ interface BookingCardProps {
     lng: number;
   }) => void;
 }
+
 const BookingCard: React.FC<BookingCardProps> = ({
   pickup,
   destination,
@@ -37,10 +41,8 @@ const BookingCard: React.FC<BookingCardProps> = ({
   onDestinationChange
 }) => {
   const navigate = useNavigate();
-  const {
-    isAuthenticated,
-    isGuest
-  } = useAuth();
+  const { isAuthenticated, isGuest, user } = useAuth();
+
   const handleFindRides = () => {
     if (!pickup.coordinates || !destination.coordinates) {
       return;
@@ -52,7 +54,23 @@ const BookingCard: React.FC<BookingCardProps> = ({
       return;
     }
 
-    // If authenticated, proceed to ride pricing
+    // Create a ride request and store it for drivers to see
+    const rideRequest = {
+      customerId: user?.id || 'unknown',
+      customerName: `${user?.firstName || 'Unknown'} ${user?.lastName || 'User'}`,
+      pickup,
+      destination,
+      distance: routeInfo ? `${routeInfo.distance.toFixed(1)} miles` : '0 miles',
+      fare: routeInfo ? `$${(routeInfo.distance * 2.5).toFixed(2)}` : '$10.00',
+      eta: '5 min'
+    };
+
+    // Store the request for drivers to pick up
+    const existingRequests = JSON.parse(localStorage.getItem('pendingRideRequests') || '[]');
+    existingRequests.push(rideRequest);
+    localStorage.setItem('pendingRideRequests', JSON.stringify(existingRequests));
+
+    // Navigate to ride pricing
     navigate('/ride-pricing', {
       state: {
         pickup,
@@ -61,29 +79,49 @@ const BookingCard: React.FC<BookingCardProps> = ({
       }
     });
   };
-  return <Card className="bg-gray-800 border-gray-700">
+
+  return (
+    <Card className="bg-white border-gray-200">
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2 text-white">
+        <CardTitle className="flex items-center space-x-2 text-gray-900">
           <MapPin className="h-5 w-5 text-orange-500" />
           <span>Book a New Ride</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-4">
-          <LocationSearchInput placeholder="Enter pickup location" value={pickup.address} onChange={onPickupChange} icon="pickup" />
-          <LocationSearchInput placeholder="Enter destination" value={destination.address} onChange={onDestinationChange} icon="destination" />
+          <LocationSearchInput 
+            placeholder="Enter pickup location" 
+            value={pickup.address} 
+            onChange={onPickupChange} 
+            icon="pickup" 
+          />
+          <LocationSearchInput 
+            placeholder="Enter destination" 
+            value={destination.address} 
+            onChange={onDestinationChange} 
+            icon="destination" 
+          />
         </div>
         
-        {routeInfo && <div className="bg-gray-700 p-3 rounded-lg">
-            <p className="text-white text-sm">
+        {routeInfo && (
+          <div className="bg-gray-100 p-3 rounded-lg">
+            <p className="text-gray-900 text-sm">
               Distance: {routeInfo.distance.toFixed(1)} miles • Duration: {routeInfo.duration}
             </p>
-          </div>}
+          </div>
+        )}
         
-        <Button disabled={!pickup.coordinates || !destination.coordinates} onClick={handleFindRides} className="w-full py-3 transition-all duration-300 bg-zinc-50 text-zinc-950">
+        <Button 
+          disabled={!pickup.coordinates || !destination.coordinates} 
+          onClick={handleFindRides} 
+          className="w-full py-3 transition-all duration-300 bg-gray-900 text-white hover:bg-gray-800"
+        >
           {isGuest || !isAuthenticated ? 'Login to See Prices' : 'Find Rides'}
         </Button>
       </CardContent>
-    </Card>;
+    </Card>
+  );
 };
+
 export default BookingCard;

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { User, Settings, MapPin, Car } from "lucide-react";
 const SettingsTab: React.FC = () => {
   return <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-slate-100">Settings</h1>
+      <h1 className="text-3xl font-bold text-slate-950">Settings</h1>
       <Card className="bg-gray-800 border-gray-700">
         <CardContent className="p-6">
           <div className="space-y-6">

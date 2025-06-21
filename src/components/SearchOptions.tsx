@@ -27,7 +27,7 @@ const SearchOptions: React.FC = () => {
             </div>
             <h3 className="text-white font-semibold mb-2">{option.title}</h3>
             <p className="text-gray-400 text-sm mb-4">{option.description}</p>
-            <Button onClick={option.action} variant="outline" className="w-full border-gray-600 hover:bg-gray-600 text-zinc-950">
+            <Button onClick={option.action} variant="outline" className="w-full border-gray-600 text-zinc-950 bg-slate-100">
               Explore
             </Button>
           </CardContent>

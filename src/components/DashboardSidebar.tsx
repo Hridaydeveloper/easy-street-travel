@@ -27,9 +27,9 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ activeTab, setActiv
 
   const sidebarItems: SidebarItem[] = [
     {
-      id: 'home',
-      icon: <MapPin className="h-5 w-5" />,
-      label: 'Book Ride'
+      id: 'profile',
+      icon: <User className="h-5 w-5" />,
+      label: 'Profile'
     },
     {
       id: 'history',
@@ -37,9 +37,9 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ activeTab, setActiv
       label: 'Ride History'
     },
     {
-      id: 'profile',
-      icon: <User className="h-5 w-5" />,
-      label: 'Profile'
+      id: 'home',
+      icon: <MapPin className="h-5 w-5" />,
+      label: 'Book Ride'
     },
     {
       id: 'settings',
@@ -49,46 +49,48 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ activeTab, setActiv
   ];
 
   return (
-    <div className="w-64 bg-gray-800 shadow-lg border-r border-gray-700 min-h-screen">
-      <div className="p-6 border-b border-gray-700">
-        <div className="flex items-center space-x-2">
-          <span className="text-2xl font-bold text-white">Uber</span>
+    <div className="w-full md:w-64 bg-white shadow-lg border-r border-gray-200 min-h-screen">
+      <div className="p-4 md:p-6 border-b border-gray-200">
+        <div className="flex items-center justify-center md:justify-start space-x-2">
+          <span className="text-xl md:text-2xl font-bold text-black">Uber</span>
         </div>
       </div>
 
-      <nav className="mt-6">
-        {sidebarItems.map(item => (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors duration-200 ${
-              activeTab === item.id 
-                ? 'bg-orange-600/20 text-orange-400 border-r-2 border-orange-500' 
-                : 'text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            {item.icon}
-            <span className="font-medium">{item.label}</span>
-          </button>
-        ))}
+      <nav className="mt-4 md:mt-6 px-2 md:px-0">
+        <div className="grid grid-cols-4 md:grid-cols-1 gap-1 md:gap-0">
+          {sidebarItems.map(item => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`flex flex-col md:flex-row items-center justify-center md:justify-start space-y-1 md:space-y-0 md:space-x-3 px-2 md:px-6 py-3 md:py-3 text-center md:text-left transition-colors duration-200 rounded-md md:rounded-none ${
+                activeTab === item.id 
+                  ? 'bg-black text-white md:border-r-2 md:border-black' 
+                  : 'text-black hover:bg-gray-100'
+              }`}
+            >
+              {item.icon}
+              <span className="text-xs md:text-base font-medium">{item.label}</span>
+            </button>
+          ))}
+        </div>
       </nav>
 
-      <div className="absolute bottom-0 w-64 p-6 border-t border-gray-700 space-y-2">
+      <div className="absolute bottom-0 w-full md:w-64 p-4 md:p-6 border-t border-gray-200 space-y-2 bg-white">
         <Button 
           variant="ghost" 
           onClick={() => navigate('/')} 
-          className="w-full justify-start text-gray-300 hover:text-white hover:bg-gray-700"
+          className="w-full justify-center md:justify-start text-black hover:text-black hover:bg-gray-100"
         >
-          <Home className="h-5 w-5 mr-3" />
-          Back to Home
+          <Home className="h-5 w-5 mr-0 md:mr-3" />
+          <span className="hidden md:inline">Back to Home</span>
         </Button>
         <Button 
           variant="ghost" 
           onClick={handleLogout} 
-          className="w-full justify-start text-gray-300 hover:text-white hover:bg-gray-700"
+          className="w-full justify-center md:justify-start text-black hover:text-black hover:bg-gray-100"
         >
-          <LogOut className="h-5 w-5 mr-3" />
-          Sign Out
+          <LogOut className="h-5 w-5 mr-0 md:mr-3" />
+          <span className="hidden md:inline">Sign Out</span>
         </Button>
       </div>
     </div>

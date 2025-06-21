@@ -26,7 +26,7 @@ interface LocationData {
 }
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState('profile');
   const [pickup, setPickup] = useState<LocationData>({
     address: ''
   });
@@ -98,18 +98,21 @@ const Dashboard = () => {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'profile':
+        return <ProfileTab />;
+      case 'history':
+        return <HistoryTab rides={recentRides} />;
       case 'home':
         return (
-          <div className="space-y-6 px-2 sm:px-0">
+          <div className="space-y-6 px-2 sm:px-4">
             <div className="text-center sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 Welcome back, {user?.firstName || 'User'}!
               </h1>
-              <p className="text-gray-300">Ready for your next ride?</p>
+              <p className="text-gray-600">Ready for your next ride?</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Booking Card */}
               <div className="order-1">
                 <BookingCard
                   pickup={pickup}
@@ -120,7 +123,6 @@ const Dashboard = () => {
                 />
               </div>
 
-              {/* Map Display */}
               <div className="order-2 h-96">
                 {pickup.coordinates && destination.coordinates ? (
                   <MapDisplay 
@@ -129,10 +131,10 @@ const Dashboard = () => {
                     onRouteCalculated={handleRouteCalculated} 
                   />
                 ) : (
-                  <Card className="h-full bg-gray-800 border-gray-600 flex items-center justify-center">
+                  <Card className="h-full bg-white border-gray-200 flex items-center justify-center">
                     <CardContent className="text-center">
                       <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-300">Select pickup and destination to view map</p>
+                      <p className="text-gray-600">Select pickup and destination to view map</p>
                     </CardContent>
                   </Card>
                 )}
@@ -140,16 +142,16 @@ const Dashboard = () => {
             </div>
 
             {/* Current Ride Status */}
-            <Card className="bg-gray-800 border-gray-600">
+            <Card className="bg-white border-gray-200">
               <CardContent className="p-6">
-                <h2 className="text-xl font-bold text-white mb-4">Current Ride</h2>
-                <div className="bg-green-900/30 border border-green-600 rounded-lg p-4">
+                <h2 className="text-xl font-bold text-black mb-4">Current Ride</h2>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold text-white">Your ride is arriving!</p>
-                      <p className="text-sm text-gray-300">Estimated arrival: 3-5 minutes</p>
+                      <p className="font-semibold text-black">Your ride is arriving!</p>
+                      <p className="text-sm text-gray-600">Estimated arrival: 3-5 minutes</p>
                     </div>
-                    <div className="text-green-400 font-bold text-lg">
+                    <div className="text-green-600 font-bold text-lg">
                       Active
                     </div>
                   </div>
@@ -157,23 +159,15 @@ const Dashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Search Options */}
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Quick Search</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-black mb-4">Quick Search</h2>
               <SearchOptions />
             </div>
 
-            {/* Quick Stats */}
             <QuickStats />
-
-            {/* Recent Rides */}
             <RecentRides rides={recentRides} />
           </div>
         );
-      case 'history':
-        return <HistoryTab rides={recentRides} />;
-      case 'profile':
-        return <ProfileTab />;
       case 'settings':
         return <SettingsTab />;
       default:
@@ -183,16 +177,19 @@ const Dashboard = () => {
 
   return (
     <GoogleMapsLoader>
-      <div className="min-h-screen bg-gray-900">
-        {/* Add Navigation Bar */}
+      <div className="min-h-screen bg-white">
         <Navigation />
         
-        <div className="flex pt-16">
-          {/* Sidebar */}
-          <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className="flex flex-col md:flex-row pt-16">
+          <div className="md:hidden">
+            <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+          </div>
+          
+          <div className="hidden md:block">
+            <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+          </div>
 
-          {/* Main Content */}
-          <div className="flex-1 p-4 sm:p-8 bg-gray-900 overflow-x-hidden">
+          <div className="flex-1 p-2 sm:p-4 md:p-8 bg-white overflow-x-hidden">
             {renderContent()}
           </div>
         </div>

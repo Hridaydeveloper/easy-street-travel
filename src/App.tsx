@@ -1,6 +1,7 @@
+
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
+import Index from './pages/Index'
 import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard'
 import RidePricing from './pages/RidePricing'
@@ -17,7 +18,7 @@ function App() {
         <RideRequestProvider>
           <div className="min-h-screen bg-white">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/ride-pricing" element={<RidePricing />} />

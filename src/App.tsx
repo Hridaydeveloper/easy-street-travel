@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import RidePricing from './pages/RidePricing'
 import DriverPortal from './pages/DriverPortal'
 import DriverLogin from './pages/DriverLogin'
+import Payment from './pages/Payment'
 import { AuthProvider } from './contexts/AuthContext'
 import { Toaster } from "@/components/ui/toaster"
 import { RideRequestProvider } from "@/contexts/RideRequestContext";
@@ -22,6 +23,7 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/ride-pricing" element={<RidePricing />} />
+              <Route path="/payment" element={<Payment />} />
               <Route path="/driver-portal" element={<DriverPortal />} />
               <Route path="/driver-login" element={<DriverLogin />} />
             </Routes>

@@ -48,7 +48,7 @@ const RouteHeader: React.FC<RouteHeaderProps> = ({ pickup, destination, distance
               <div className="text-xs text-gray-500 mt-1 flex flex-wrap items-center gap-x-4 gap-y-1">
                 <span className="flex items-center space-x-1">
                   <MapPin className="h-3 w-3 flex-shrink-0" />
-                  <span>{distance.toFixed(1)} miles</span>
+                  <span>{distance.toFixed(1)} km</span>
                 </span>
                 <span className="flex items-center space-x-1">
                   <Clock className="h-3 w-3 flex-shrink-0" />

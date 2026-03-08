@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ArrowLeft, MapPin, CreditCard, DollarSign, Clock, User, Phone, Mail, Car, Users, Crown } from "lucide-react";
+import { ArrowLeft, MapPin, CreditCard, IndianRupee, Clock, User, Phone, Mail, Car, Users, Crown } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -40,24 +40,19 @@ const Payment = () => {
 
   const handlePayment = async () => {
     setIsBooking(true);
-    
     setTimeout(() => {
       setIsBooking(false);
       setIsBooked(true);
     }, 2000);
   };
 
-  // Get the appropriate icon based on ride option
   const getRideIcon = (rideOptionId: string) => {
     switch (rideOptionId) {
-      case 'uberx':
-        return <Car className="h-8 w-8" />;
-      case 'uberxl':
-        return <Users className="h-8 w-8" />;
-      case 'uberblack':
-        return <Crown className="h-8 w-8" />;
-      default:
-        return <Car className="h-8 w-8" />;
+      case 'ubergo': return <Car className="h-8 w-8" />;
+      case 'uberpremier': return <Car className="h-8 w-8" />;
+      case 'uberxl': return <Users className="h-8 w-8" />;
+      case 'uberblack': return <Crown className="h-8 w-8" />;
+      default: return <Car className="h-8 w-8" />;
     }
   };
 
@@ -65,7 +60,6 @@ const Payment = () => {
     return (
       <div className="min-h-screen bg-white">
         <Navigation />
-        
         <div className="pt-20 pb-8 container mx-auto p-4 min-h-screen flex items-center justify-center">
           <div className="max-w-md mx-auto text-center space-y-6">
             <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto">
@@ -73,12 +67,10 @@ const Payment = () => {
                 <div className="w-3 h-3 bg-white rounded-full"></div>
               </div>
             </div>
-            
             <div>
               <h1 className="text-2xl font-bold text-black mb-2">Ride Booked Successfully!</h1>
               <p className="text-gray-600">Your ride is arriving in 3-5 minutes</p>
             </div>
-
             <Card className="bg-gray-50 border-gray-200">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center space-x-2">
@@ -91,11 +83,7 @@ const Payment = () => {
                 </div>
               </CardContent>
             </Card>
-
-            <Button 
-              onClick={() => navigate('/dashboard')} 
-              className="w-full bg-black text-white hover:bg-gray-800"
-            >
+            <Button onClick={() => navigate('/dashboard')} className="w-full bg-black text-white hover:bg-gray-800">
               Go to Dashboard
             </Button>
           </div>
@@ -107,17 +95,11 @@ const Payment = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
-      
       <div className="pt-16">
         <div className="bg-gray-50 border-b border-gray-200 p-4">
           <div className="container mx-auto">
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate(-1)}
-                className="text-black hover:bg-gray-200"
-              >
+              <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-black hover:bg-gray-200">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <h1 className="text-xl font-bold text-black">Payment</h1>
@@ -127,7 +109,6 @@ const Payment = () => {
 
         <div className="container mx-auto p-4 max-w-2xl">
           <div className="space-y-6">
-            {/* Trip Details */}
             <Card className="border-gray-200">
               <CardHeader>
                 <CardTitle className="text-black flex items-center space-x-2">
@@ -146,11 +127,10 @@ const Payment = () => {
                     <span className="text-gray-700">{rideDetails.destination.address}</span>
                   </div>
                 </div>
-                
                 <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
                   <div className="text-center">
                     <p className="text-sm text-gray-500">Distance</p>
-                    <p className="font-semibold text-black">{rideDetails.distance?.toFixed(1)} mi</p>
+                    <p className="font-semibold text-black">{rideDetails.distance?.toFixed(1)} km</p>
                   </div>
                   <div className="text-center">
                     <p className="text-sm text-gray-500">Duration</p>
@@ -158,13 +138,12 @@ const Payment = () => {
                   </div>
                   <div className="text-center">
                     <p className="text-sm text-gray-500">Price</p>
-                    <p className="font-semibold text-black">${rideDetails.price}</p>
+                    <p className="font-semibold text-black">₹{rideDetails.price}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Customer Details */}
             <Card className="border-gray-200">
               <CardHeader>
                 <CardTitle className="text-black flex items-center space-x-2">
@@ -179,7 +158,7 @@ const Payment = () => {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-4 w-4 text-gray-500" />
-                  <span className="text-gray-700">{user?.phone || '+1 (555) 123-4567'}</span>
+                  <span className="text-gray-700">{user?.phone || 'Not provided'}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="h-4 w-4 text-gray-500" />
@@ -188,7 +167,6 @@ const Payment = () => {
               </CardContent>
             </Card>
 
-            {/* Payment Method */}
             <Card className="border-gray-200">
               <CardHeader>
                 <CardTitle className="text-black flex items-center space-x-2">
@@ -201,9 +179,9 @@ const Payment = () => {
                   <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
                     <RadioGroupItem value="cod" id="cod" />
                     <label htmlFor="cod" className="flex items-center space-x-3 cursor-pointer flex-1">
-                      <DollarSign className="h-5 w-5 text-green-600" />
+                      <IndianRupee className="h-5 w-5 text-green-600" />
                       <div>
-                        <p className="font-medium text-black">Cash on Delivery</p>
+                        <p className="font-medium text-black">Cash Payment</p>
                         <p className="text-sm text-gray-500">Pay with cash when you reach your destination</p>
                       </div>
                     </label>
@@ -212,7 +190,6 @@ const Payment = () => {
               </CardContent>
             </Card>
 
-            {/* Ride Option */}
             <Card className="border-gray-200">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
@@ -224,7 +201,7 @@ const Payment = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-xl text-black">${rideDetails.price}</p>
+                    <p className="font-bold text-xl text-black">₹{rideDetails.price}</p>
                   </div>
                 </div>
               </CardContent>
@@ -243,7 +220,7 @@ const Payment = () => {
               ) : (
                 <>
                   <Clock className="h-4 w-4 mr-2" />
-                  Book Ride - ${rideDetails.price}
+                  Book Ride - ₹{rideDetails.price}
                 </>
               )}
             </Button>

@@ -60,8 +60,8 @@ const BookingCard: React.FC<BookingCardProps> = ({
       customerName: `${user?.firstName || 'Unknown'} ${user?.lastName || 'User'}`,
       pickup,
       destination,
-      distance: routeInfo ? `${routeInfo.distance.toFixed(1)} miles` : '0 miles',
-      fare: routeInfo ? `$${(routeInfo.distance * 2.5).toFixed(2)}` : '$10.00',
+      distance: routeInfo ? `${(routeInfo.distance * 1.60934).toFixed(1)} km` : '0 km',
+      fare: routeInfo ? `₹${Math.round(routeInfo.distance * 1.60934 * 11 + 40)}` : '₹100',
       eta: '5 min'
     };
 
@@ -107,7 +107,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
         {routeInfo && (
           <div className="bg-gray-100 p-3 rounded-lg">
             <p className="text-gray-900 text-sm">
-              Distance: {routeInfo.distance.toFixed(1)} miles • Duration: {routeInfo.duration}
+              Distance: {(routeInfo.distance * 1.60934).toFixed(1)} km • Duration: {routeInfo.duration}
             </p>
           </div>
         )}

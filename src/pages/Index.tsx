@@ -7,6 +7,9 @@ import Navigation from "@/components/Navigation";
 import RideBookingForm from "@/components/RideBookingForm";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
+import rideOptionsImg from "@/assets/ride-options.jpg";
+import airportRidesImg from "@/assets/airport-rides.jpg";
+import cityRidesImg from "@/assets/city-rides.jpg";
 
 const Index = () => {
   const navigate = useNavigate();

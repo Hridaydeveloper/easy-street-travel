@@ -23,7 +23,7 @@ const Services = () => {
       title: "UberXL",
       description: "Affordable rides for larger groups, up to 6 passengers",
       features: ["Up to 6 seats", "Extra space", "Group friendly"],
-      image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_552,w_552/v1689609697/assets/b8/c39de0-6e13-485b-ba45-66511170c62a/original/SS_Commuter.jpg"
+      image: cityRidesImg
     },
     {
       icon: <Package className="h-12 w-12 text-white" />,

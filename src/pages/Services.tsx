@@ -5,6 +5,9 @@ import { Car, Truck, Package, Users, Clock, Shield, Star, ArrowRight } from "luc
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import rideOptionsImg from "@/assets/ride-options.jpg";
+import cityRidesImg from "@/assets/city-rides.jpg";
+import airportRidesImg from "@/assets/airport-rides.jpg";
 
 const Services = () => {
   const services = [

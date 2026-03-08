@@ -16,7 +16,7 @@ const Services = () => {
       title: "UberX",
       description: "Affordable, everyday rides for up to 4 passengers",
       features: ["Up to 4 seats", "Affordable rates", "Reliable drivers"],
-      image: "https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,h_372,w_558/v1565733741/assets/0f/9719ad-69a4-4c0d-9444-ce6d8c3f9759/original/Signup.svg"
+      image: rideOptionsImg
     },
     {
       icon: <Users className="h-12 w-12 text-white" />,

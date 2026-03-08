@@ -22,6 +22,7 @@ const MapSearch = () => {
   const [showPredictions, setShowPredictions] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<SelectedLocation | null>(null);
   const [currentMarker, setCurrentMarker] = useState<google.maps.Marker | null>(null);
+  const [mapError, setMapError] = useState<string | null>(null);
   
   const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
   const placesService = useRef<google.maps.places.PlacesService | null>(null);
@@ -30,7 +31,21 @@ const MapSearch = () => {
   const newDelhiCenter = { lat: 28.6139, lng: 77.2090 };
 
   useEffect(() => {
-    initializeMap();
+    // Listen for Google Maps auth errors
+    const originalError = console.error;
+    console.error = (...args: any[]) => {
+      const msg = args.join(' ');
+      if (msg.includes('RefererNotAllowedMapError') || msg.includes('Google Maps JavaScript API error')) {
+        setMapError('Google Maps API key is not authorized for this domain. Please add *.lovableproject.com and *.lovable.app to your API key\'s allowed referrers in Google Cloud Console.');
+      }
+      originalError.apply(console, args);
+    };
+
+    const timer = setTimeout(() => initializeMap(), 200);
+    return () => {
+      console.error = originalError;
+      clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
@@ -241,8 +256,22 @@ const MapSearch = () => {
           )}
 
           {/* Map Container */}
-          <div className="w-full h-96 md:h-[500px] lg:h-[600px] rounded-lg overflow-hidden border border-gray-300">
+          <div className="w-full h-96 md:h-[500px] lg:h-[600px] rounded-lg overflow-hidden border border-border relative">
             <div ref={mapRef} className="w-full h-full" />
+            {mapError && (
+              <div className="absolute inset-0 flex items-center justify-center bg-muted/90 z-10">
+                <div className="text-center p-6 max-w-md">
+                  <MapPin className="h-12 w-12 text-destructive mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Map Unavailable</h3>
+                  <p className="text-sm text-muted-foreground mb-4">{mapError}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Go to <strong>Google Cloud Console → APIs & Services → Credentials</strong>, edit your API key, and add these referrers:<br/>
+                    <code className="bg-muted px-1 rounded">*.lovableproject.com/*</code><br/>
+                    <code className="bg-muted px-1 rounded">*.lovable.app/*</code>
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

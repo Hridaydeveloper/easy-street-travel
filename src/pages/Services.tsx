@@ -30,7 +30,7 @@ const Services = () => {
       title: "Airport Rides",
       description: "Reliable rides to and from 700+ airports worldwide",
       features: ["24/7 availability", "Flight tracking", "Fixed pricing"],
-      image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_552,w_552/v1692743890/assets/f9/ba27c4-665c-4cca-8161-9e3f87f49994/original/Airport-rides.png"
+      image: airportRidesImg
     }
   ];
 

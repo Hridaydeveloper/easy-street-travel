@@ -26,7 +26,7 @@ const Index = () => {
     title: "700+ airports",
     description: "You can request a ride to and from most major airports. Schedule a ride to the airport for one less thing to worry about.",
     buttonText: "Search airports",
-    image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_552,w_552/v1692743890/assets/f9/ba27c4-665c-4cca-8161-9e3f87f49994/original/Airport-rides.png"
+    image: airportRidesImg
   }, {
     icon: <Users className="h-12 w-12 text-white" />,
     title: "10,000+ cities",

@@ -5,6 +5,9 @@ import { Car, Truck, Package, Users, Clock, Shield, Star, ArrowRight } from "luc
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import rideOptionsImg from "@/assets/ride-options.jpg";
+import cityRidesImg from "@/assets/city-rides.jpg";
+import airportRidesImg from "@/assets/airport-rides.jpg";
 
 const Services = () => {
   const services = [
@@ -13,21 +16,21 @@ const Services = () => {
       title: "UberX",
       description: "Affordable, everyday rides for up to 4 passengers",
       features: ["Up to 4 seats", "Affordable rates", "Reliable drivers"],
-      image: "https://www.uber-assets.com/image/upload/q_auto:eco,c_fill,h_372,w_558/v1565733741/assets/0f/9719ad-69a4-4c0d-9444-ce6d8c3f9759/original/Signup.svg"
+      image: rideOptionsImg
     },
     {
       icon: <Users className="h-12 w-12 text-white" />,
       title: "UberXL",
       description: "Affordable rides for larger groups, up to 6 passengers",
       features: ["Up to 6 seats", "Extra space", "Group friendly"],
-      image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_552,w_552/v1689609697/assets/b8/c39de0-6e13-485b-ba45-66511170c62a/original/SS_Commuter.jpg"
+      image: cityRidesImg
     },
     {
       icon: <Package className="h-12 w-12 text-white" />,
       title: "Airport Rides",
       description: "Reliable rides to and from 700+ airports worldwide",
       features: ["24/7 availability", "Flight tracking", "Fixed pricing"],
-      image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_552,w_552/v1692743890/assets/f9/ba27c4-665c-4cca-8161-9e3f87f49994/original/Airport-rides.png"
+      image: airportRidesImg
     }
   ];
 

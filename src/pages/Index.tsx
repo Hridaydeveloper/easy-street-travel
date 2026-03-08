@@ -7,6 +7,9 @@ import Navigation from "@/components/Navigation";
 import RideBookingForm from "@/components/RideBookingForm";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
+import rideOptionsImg from "@/assets/ride-options.jpg";
+import airportRidesImg from "@/assets/airport-rides.jpg";
+import cityRidesImg from "@/assets/city-rides.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -17,19 +20,19 @@ const Index = () => {
     title: "Ride Options",
     description: "There's more than one way to move with Uber, no matter where you are or where you're headed next.",
     buttonText: "Search ride options",
-    image: "https://www.pinclipart.com/picdir/big/541-5411434_uber-illustrations-clipart.png"
+    image: rideOptionsImg
   }, {
     icon: <MapPin className="h-12 w-12 text-white" />,
     title: "700+ airports",
     description: "You can request a ride to and from most major airports. Schedule a ride to the airport for one less thing to worry about.",
     buttonText: "Search airports",
-    image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_552,w_552/v1692743890/assets/f9/ba27c4-665c-4cca-8161-9e3f87f49994/original/Airport-rides.png"
+    image: airportRidesImg
   }, {
     icon: <Users className="h-12 w-12 text-white" />,
     title: "10,000+ cities",
     description: "The app is available in thousands of cities worldwide, so you can request a ride even when you're far from home.",
     buttonText: "Search cities",
-    image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_552,w_552/v1689609697/assets/b8/c39de0-6e13-485b-ba45-66511170c62a/original/SS_Commuter.jpg"
+    image: cityRidesImg
   }];
   const benefits = ["One tap to request", "Upfront pricing", "24/7 reliable service", "Safe and secure rides"];
 

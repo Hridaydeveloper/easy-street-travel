@@ -22,6 +22,7 @@ const MapSearch = () => {
   const [showPredictions, setShowPredictions] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<SelectedLocation | null>(null);
   const [currentMarker, setCurrentMarker] = useState<google.maps.Marker | null>(null);
+  const [mapError, setMapError] = useState<string | null>(null);
   
   const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
   const placesService = useRef<google.maps.places.PlacesService | null>(null);
@@ -30,7 +31,21 @@ const MapSearch = () => {
   const newDelhiCenter = { lat: 28.6139, lng: 77.2090 };
 
   useEffect(() => {
-    initializeMap();
+    // Listen for Google Maps auth errors
+    const originalError = console.error;
+    console.error = (...args: any[]) => {
+      const msg = args.join(' ');
+      if (msg.includes('RefererNotAllowedMapError') || msg.includes('Google Maps JavaScript API error')) {
+        setMapError('Google Maps API key is not authorized for this domain. Please add *.lovableproject.com and *.lovable.app to your API key\'s allowed referrers in Google Cloud Console.');
+      }
+      originalError.apply(console, args);
+    };
+
+    const timer = setTimeout(() => initializeMap(), 200);
+    return () => {
+      console.error = originalError;
+      clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {

@@ -61,7 +61,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
       pickup,
       destination,
       distance: routeInfo ? `${routeInfo.distance.toFixed(1)} miles` : '0 miles',
-      fare: routeInfo ? `$${(routeInfo.distance * 2.5).toFixed(2)}` : '$10.00',
+      fare: routeInfo ? `₹${Math.round(routeInfo.distance * 1.60934 * 11 + 40)}` : '₹100',
       eta: '5 min'
     };
 

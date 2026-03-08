@@ -20,7 +20,7 @@ const Index = () => {
     title: "Ride Options",
     description: "There's more than one way to move with Uber, no matter where you are or where you're headed next.",
     buttonText: "Search ride options",
-    image: "https://www.pinclipart.com/picdir/big/541-5411434_uber-illustrations-clipart.png"
+    image: rideOptionsImg
   }, {
     icon: <MapPin className="h-12 w-12 text-white" />,
     title: "700+ airports",

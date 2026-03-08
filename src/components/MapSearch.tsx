@@ -256,8 +256,22 @@ const MapSearch = () => {
           )}
 
           {/* Map Container */}
-          <div className="w-full h-96 md:h-[500px] lg:h-[600px] rounded-lg overflow-hidden border border-gray-300">
+          <div className="w-full h-96 md:h-[500px] lg:h-[600px] rounded-lg overflow-hidden border border-border relative">
             <div ref={mapRef} className="w-full h-full" />
+            {mapError && (
+              <div className="absolute inset-0 flex items-center justify-center bg-muted/90 z-10">
+                <div className="text-center p-6 max-w-md">
+                  <MapPin className="h-12 w-12 text-destructive mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Map Unavailable</h3>
+                  <p className="text-sm text-muted-foreground mb-4">{mapError}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Go to <strong>Google Cloud Console → APIs & Services → Credentials</strong>, edit your API key, and add these referrers:<br/>
+                    <code className="bg-muted px-1 rounded">*.lovableproject.com/*</code><br/>
+                    <code className="bg-muted px-1 rounded">*.lovable.app/*</code>
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

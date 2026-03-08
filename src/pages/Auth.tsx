@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,8 +14,7 @@ interface AuthProps {
 
 const Auth = ({ onSkip }: AuthProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loginMethod, setLoginMethod] = useState('email');
-  const [loginData, setLoginData] = useState({ email: '', phone: '', password: '' });
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ 
     firstName: '', 
     lastName: '', 
@@ -23,33 +23,24 @@ const Auth = ({ onSkip }: AuthProps) => {
     password: '' 
   });
   const [error, setError] = useState('');
-  const [registeredUsers, setRegisteredUsers] = useState<any[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { login, setGuestMode } = useAuth();
+  const { login, signup, setGuestMode } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsSubmitting(true);
     
-    // Check if user exists in registered users
-    const existingUser = registeredUsers.find(user => 
-      (loginMethod === 'email' && user.email === loginData.email) ||
-      (loginMethod === 'phone' && user.phone === loginData.phone)
-    );
+    const { error } = await login(loginData.email, loginData.password);
     
-    if (!existingUser) {
-      setError('Wrong credentials. Please sign up or create an account first.');
+    if (error) {
+      setError(error);
+      setIsSubmitting(false);
       return;
     }
     
-    if (existingUser.password !== loginData.password) {
-      setError('Wrong credentials. Please check your password.');
-      return;
-    }
-    
-    // Login successful
-    login(existingUser);
-    
+    setIsSubmitting(false);
     if (onSkip) {
       onSkip();
     } else {
@@ -57,37 +48,24 @@ const Auth = ({ onSkip }: AuthProps) => {
     }
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsSubmitting(true);
     
-    // Check if user already exists
-    const existingUser = registeredUsers.find(user => 
-      user.email === signupData.email || user.phone === signupData.phone
-    );
+    const { error } = await signup(signupData.email, signupData.password, {
+      firstName: signupData.firstName,
+      lastName: signupData.lastName,
+      phone: signupData.phone,
+    });
     
-    if (existingUser) {
-      setError('User already exists with this email or phone number.');
+    if (error) {
+      setError(error);
+      setIsSubmitting(false);
       return;
     }
     
-    // Create new user
-    const userData = {
-      id: Date.now().toString(),
-      firstName: signupData.firstName,
-      lastName: signupData.lastName,
-      email: signupData.email,
-      phone: signupData.phone,
-      password: signupData.password
-    };
-    
-    // Add to registered users
-    setRegisteredUsers(prev => [...prev, userData]);
-    
-    // Login the user
-    login(userData);
-    
-    // Redirect to home page after account creation
+    setIsSubmitting(false);
     if (onSkip) {
       onSkip();
     } else {
@@ -114,7 +92,6 @@ const Auth = ({ onSkip }: AuthProps) => {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4 relative">
-      {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
         style={{
@@ -122,7 +99,6 @@ const Auth = ({ onSkip }: AuthProps) => {
         }}
       />
       
-      {/* Back/Close Button */}
       <Button
         variant="ghost"
         onClick={handleBack}
@@ -132,7 +108,6 @@ const Auth = ({ onSkip }: AuthProps) => {
         Back
       </Button>
 
-      {/* Skip Button */}
       <Button
         variant="ghost"
         onClick={handleSkip}
@@ -143,7 +118,6 @@ const Auth = ({ onSkip }: AuthProps) => {
       </Button>
 
       <div className="w-full max-w-md relative z-10">
-        {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center space-x-2 mb-4">
             <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
@@ -159,7 +133,6 @@ const Auth = ({ onSkip }: AuthProps) => {
             <CardTitle className="text-center text-white">Get Started</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* Error Message */}
             {error && (
               <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center space-x-2">
                 <AlertCircle className="h-5 w-5 text-red-400" />
@@ -179,53 +152,17 @@ const Auth = ({ onSkip }: AuthProps) => {
 
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
-                  {/* Login Method Toggle */}
-                  <div className="flex space-x-2 mb-4">
-                    <Button
-                      type="button"
-                      variant={loginMethod === 'email' ? 'default' : 'ghost'}
-                      onClick={() => setLoginMethod('email')}
-                      className={`flex-1 ${loginMethod === 'email' ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Email
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={loginMethod === 'phone' ? 'default' : 'ghost'}
-                      onClick={() => setLoginMethod('phone')}
-                      className={`flex-1 ${loginMethod === 'phone' ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}
-                    >
-                      <Phone className="h-4 w-4 mr-2" />
-                      Phone
-                    </Button>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Input
+                      type="email"
+                      placeholder="Email address"
+                      value={loginData.email}
+                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                      className="pl-10 bg-white/10 border-white/20 text-white placeholder-white/60"
+                      required
+                    />
                   </div>
-
-                  {loginMethod === 'email' ? (
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                      <Input
-                        type="email"
-                        placeholder="Email address"
-                        value={loginData.email}
-                        onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                        className="pl-10 bg-white/10 border-white/20 text-white placeholder-white/60"
-                        required
-                      />
-                    </div>
-                  ) : (
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                      <Input
-                        type="tel"
-                        placeholder="Phone number"
-                        value={loginData.phone}
-                        onChange={(e) => setLoginData({ ...loginData, phone: e.target.value })}
-                        className="pl-10 bg-white/10 border-white/20 text-white placeholder-white/60"
-                        required
-                      />
-                    </div>
-                  )}
                   
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -248,9 +185,10 @@ const Auth = ({ onSkip }: AuthProps) => {
 
                   <Button 
                     type="submit" 
+                    disabled={isSubmitting}
                     className="w-full bg-white text-black hover:bg-gray-200 py-3 transition-all duration-300 transform hover:scale-105"
                   >
-                    Sign In
+                    {isSubmitting ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
               </TabsContent>
@@ -321,15 +259,15 @@ const Auth = ({ onSkip }: AuthProps) => {
 
                   <Button 
                     type="submit" 
+                    disabled={isSubmitting}
                     className="w-full bg-white text-black hover:bg-gray-200 py-3 transition-all duration-300 transform hover:scale-105"
                   >
-                    Create Account
+                    {isSubmitting ? 'Creating Account...' : 'Create Account'}
                   </Button>
                 </form>
               </TabsContent>
             </Tabs>
 
-            {/* Skip/Guest Access */}
             <div className="mt-6 text-center">
               <Button 
                 variant="ghost" 

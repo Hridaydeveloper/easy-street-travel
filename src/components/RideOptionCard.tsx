@@ -11,7 +11,7 @@ interface RideOption {
   description: string;
   icon: React.ReactNode;
   basePrice: number;
-  pricePerMile: number;
+  pricePerKm: number;
   pricePerMinute: number;
   estimatedTime: string;
   features: string[];
@@ -35,15 +35,14 @@ const RideOptionCard: React.FC<RideOptionCardProps> = ({ option, price, onBook }
       Math.sqrt(
         Math.pow(destination.coordinates.lat - pickup.coordinates.lat, 2) + 
         Math.pow(destination.coordinates.lng - pickup.coordinates.lng, 2)
-      ) * 69 : 0;
+      ) * 111 : 0; // ~111 km per degree
 
-    // Create a serializable version of the ride option without React elements
     const serializableRideOption = {
       id: option.id,
       name: option.name,
       description: option.description,
       basePrice: option.basePrice,
-      pricePerMile: option.pricePerMile,
+      pricePerKm: option.pricePerKm,
       pricePerMinute: option.pricePerMinute,
       estimatedTime: option.estimatedTime,
       features: option.features,
@@ -107,7 +106,7 @@ const RideOptionCard: React.FC<RideOptionCardProps> = ({ option, price, onBook }
             <div className="text-2xl font-bold text-black mb-2">
               {price ? (
                 <span className="text-black">
-                  ${price}
+                  ₹{price}
                 </span>
               ) : (
                 <span className="text-gray-400">Calculating...</span>

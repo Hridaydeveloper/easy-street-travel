@@ -107,7 +107,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
         {routeInfo && (
           <div className="bg-gray-100 p-3 rounded-lg">
             <p className="text-gray-900 text-sm">
-              Distance: {routeInfo.distance.toFixed(1)} miles • Duration: {routeInfo.duration}
+              Distance: {(routeInfo.distance * 1.60934).toFixed(1)} km • Duration: {routeInfo.duration}
             </p>
           </div>
         )}

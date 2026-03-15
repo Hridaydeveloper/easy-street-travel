@@ -123,7 +123,7 @@ const Auth = ({ onSkip }: AuthProps) => {
             <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
               <Car className="h-8 w-8 text-black" />
             </div>
-            <span className="text-3xl font-bold text-white">Uber</span>
+            <span className="text-3xl font-bold text-white">Drivio</span>
           </div>
           <p className="text-white/80">Welcome! Sign in to continue your journey.</p>
         </div>

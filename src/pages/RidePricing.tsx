@@ -41,55 +41,55 @@ const RidePricing = () => {
 
   const { pickup, destination, rideType } = location.state || {};
 
-  // Uber India-style pricing (INR)
+  // Drivio pricing (INR) - 30% less than previous
   const rideOptions: RideOption[] = [
     {
-      id: 'ubergo',
-      name: 'Uber Go',
+      id: 'drivio-go',
+      name: 'Drivio Go',
       description: 'Affordable compact rides',
       icon: <Car className="h-8 w-8" />,
-      basePrice: 40,
-      pricePerKm: 11,
-      pricePerMinute: 1.5,
+      basePrice: 28,
+      pricePerKm: 7.7,
+      pricePerMinute: 1.05,
       estimatedTime: '2-5 min',
       features: ['Compact cars', 'Professional drivers', 'Door-to-door service'],
       rating: 4.8,
       passengerCount: '1-4'
     },
     {
-      id: 'uberpremier',
-      name: 'Uber Premier',
+      id: 'drivio-premier',
+      name: 'Drivio Premier',
       description: 'Comfortable sedans for everyday',
       icon: <Users className="h-8 w-8" />,
-      basePrice: 70,
-      pricePerKm: 14,
-      pricePerMinute: 2,
+      basePrice: 49,
+      pricePerKm: 9.8,
+      pricePerMinute: 1.4,
       estimatedTime: '3-8 min',
       features: ['Sedan cars', 'Top-rated drivers', 'Extra comfort'],
       rating: 4.7,
       passengerCount: '1-4'
     },
     {
-      id: 'uberxl',
-      name: 'Uber XL',
+      id: 'drivio-xl',
+      name: 'Drivio XL',
       description: 'SUVs & larger cars for groups',
       icon: <Users className="h-8 w-8" />,
-      basePrice: 100,
-      pricePerKm: 18,
-      pricePerMinute: 2.5,
+      basePrice: 70,
+      pricePerKm: 12.6,
+      pricePerMinute: 1.75,
       estimatedTime: '5-10 min',
       features: ['SUVs & MUVs', 'Group travel', 'Luggage friendly'],
       rating: 4.7,
       passengerCount: '1-6'
     },
     {
-      id: 'uberblack',
-      name: 'Uber Black',
+      id: 'drivio-black',
+      name: 'Drivio Black',
       description: 'Premium luxury rides',
       icon: <Crown className="h-8 w-8" />,
-      basePrice: 150,
-      pricePerKm: 23,
-      pricePerMinute: 3,
+      basePrice: 105,
+      pricePerKm: 16.1,
+      pricePerMinute: 2.1,
       estimatedTime: '5-12 min',
       features: ['Luxury vehicles', 'Professional chauffeurs', 'Premium service'],
       rating: 4.9,
@@ -105,7 +105,6 @@ const RidePricing = () => {
   }, [pickup, destination, navigate]);
 
   const handleRouteCalculated = (calculatedDistance: number, calculatedDuration: string) => {
-    // calculatedDistance comes in miles, convert to km
     const km = calculatedDistance * 1.60934;
     setDistance(calculatedDistance);
     setDistanceKm(km);
@@ -124,9 +123,7 @@ const RidePricing = () => {
       let price = option.basePrice + 
                    (km * option.pricePerKm) + 
                    (durationInMinutes * option.pricePerMinute);
-      // Minimum fare
       if (price < option.basePrice * 1.5) price = option.basePrice * 1.5;
-      // Surge pricing placeholder (1x)
       calculatedPrices[option.id] = Math.round(price);
     });
     
@@ -140,7 +137,7 @@ const RidePricing = () => {
   if (!pickup || !destination) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-black"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
       </div>
     );
   }

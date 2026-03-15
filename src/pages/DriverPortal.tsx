@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation, ArrowLeft } from "lucide-react";
+import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation, ArrowLeft, IndianRupee } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useRideRequest } from "@/contexts/RideRequestContext";
 import RideRequestCard from "@/components/RideRequestCard";
+import { supabase } from "@/integrations/supabase/client";
 
 interface DriverProfile {
   name: string;
@@ -15,10 +16,26 @@ interface DriverProfile {
   isLoggedIn: boolean;
 }
 
+interface BookedRide {
+  id: string;
+  rider_name: string;
+  rider_email: string;
+  rider_phone: string;
+  pickup_address: string;
+  destination_address: string;
+  ride_option_name: string;
+  price: number;
+  distance: number;
+  duration: string;
+  status: string;
+  created_at: string;
+}
+
 const DriverPortal = () => {
   const [isOnline, setIsOnline] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [driverProfile, setDriverProfile] = useState<DriverProfile | null>(null);
+  const [bookedRides, setBookedRides] = useState<BookedRide[]>([]);
   const navigate = useNavigate();
   const { rideRequests, acceptRide, declineRide, pendingRequestsCount } = useRideRequest();
 
@@ -27,15 +44,38 @@ const DriverPortal = () => {
     if (stored) {
       setDriverProfile(JSON.parse(stored));
     } else {
-      // Redirect to login if no profile found
       navigate('/driver-login');
     }
   }, [navigate]);
 
+  // Fetch booked rides from database
+  useEffect(() => {
+    const fetchRides = async () => {
+      const { data, error } = await supabase
+        .from('rides')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (data) {
+        setBookedRides(data as any);
+      }
+    };
+    fetchRides();
+
+    // Subscribe to realtime updates
+    const channel = supabase
+      .channel('rides-channel')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'rides' }, () => {
+        fetchRides();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
   const earnings = {
-    today: '$125.50',
-    week: '$680.25',
-    month: '$2,845.00'
+    today: '₹8,785',
+    week: '₹47,618',
+    month: '₹1,99,150'
   };
 
   const pendingRequests = rideRequests.filter(request => request.status === 'pending');
@@ -47,7 +87,7 @@ const DriverPortal = () => {
       label: 'Dashboard',
       badge: pendingRequestsCount > 0 ? pendingRequestsCount : null
     },
-    { id: 'rides', icon: <Car className="h-5 w-5" />, label: 'Active Rides' },
+    { id: 'rides', icon: <Car className="h-5 w-5" />, label: 'Booked Rides', badge: bookedRides.length > 0 ? bookedRides.length : null },
     { id: 'earnings', icon: <DollarSign className="h-5 w-5" />, label: 'Earnings' },
     { id: 'profile', icon: <User className="h-5 w-5" />, label: 'Profile' },
     { id: 'settings', icon: <Settings className="h-5 w-5" />, label: 'Settings' }
@@ -58,14 +98,107 @@ const DriverPortal = () => {
       case 'rides':
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Active Rides</h1>
-            <Card className="bg-white border-gray-200">
-              <CardContent className="p-8 md:p-12 text-center">
-                <Car className="h-12 md:h-16 w-12 md:w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">No active rides</h3>
-                <p className="text-gray-600">You don't have any active rides at the moment</p>
-              </CardContent>
-            </Card>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Booked Rides</h1>
+            {bookedRides.length === 0 ? (
+              <Card className="bg-white border-gray-200">
+                <CardContent className="p-8 md:p-12 text-center">
+                  <Car className="h-12 md:h-16 w-12 md:w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">No booked rides yet</h3>
+                  <p className="text-gray-600">Rider bookings will appear here in real-time</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {bookedRides.map((ride) => (
+                  <Card key={ride.id} className="bg-white border-gray-200 hover:shadow-md transition-shadow">
+                    <CardContent className="p-4 md:p-6">
+                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                        <div className="space-y-3 flex-1">
+                          <div className="flex items-center space-x-2">
+                            <Badge className={ride.status === 'booked' ? 'bg-green-500 text-white' : 'bg-gray-400 text-white'}>
+                              {ride.status.toUpperCase()}
+                            </Badge>
+                            <span className="text-sm text-gray-500">{new Date(ride.created_at).toLocaleString()}</span>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <div className="flex items-start space-x-2">
+                              <div className="w-3 h-3 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                              <div>
+                                <p className="text-xs text-gray-500">Pickup</p>
+                                <p className="text-sm text-gray-800 font-medium">{ride.pickup_address}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start space-x-2">
+                              <div className="w-3 h-3 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                              <div>
+                                <p className="text-xs text-gray-500">Destination</p>
+                                <p className="text-sm text-gray-800 font-medium">{ride.destination_address}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap gap-4 pt-2 border-t border-gray-100">
+                            <div>
+                              <p className="text-xs text-gray-500">Rider</p>
+                              <p className="text-sm font-medium text-gray-800">{ride.rider_name || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">Phone</p>
+                              <p className="text-sm font-medium text-gray-800">{ride.rider_phone || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">Email</p>
+                              <p className="text-sm font-medium text-gray-800">{ride.rider_email || 'N/A'}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-row md:flex-col items-center md:items-end gap-3 md:gap-1">
+                          <div className="text-right">
+                            <p className="text-xs text-gray-500">Ride Type</p>
+                            <p className="text-sm font-semibold text-indigo-600">{ride.ride_option_name || 'Standard'}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-gray-500">Distance</p>
+                            <p className="text-sm font-medium">{ride.distance ? `${Number(ride.distance).toFixed(1)} km` : 'N/A'}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-2xl font-bold text-green-600">₹{Number(ride.price).toLocaleString()}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      case 'earnings':
+        return (
+          <div className="space-y-6">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Earnings</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="bg-white border-gray-200">
+                <CardContent className="p-6 text-center">
+                  <p className="text-sm text-gray-600">Today</p>
+                  <p className="text-3xl font-bold text-green-600">{earnings.today}</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-gray-200">
+                <CardContent className="p-6 text-center">
+                  <p className="text-sm text-gray-600">This Week</p>
+                  <p className="text-3xl font-bold text-blue-600">{earnings.week}</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-gray-200">
+                <CardContent className="p-6 text-center">
+                  <p className="text-sm text-gray-600">This Month</p>
+                  <p className="text-3xl font-bold text-purple-600">{earnings.month}</p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         );
       case 'profile':
@@ -75,8 +208,8 @@ const DriverPortal = () => {
             <Card className="bg-white border-gray-200">
               <CardContent className="p-4 md:p-6">
                 <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
-                  <div className="w-16 md:w-20 h-16 md:h-20 bg-gray-300 rounded-full flex items-center justify-center">
-                    <User className="h-8 md:h-10 w-8 md:w-10 text-gray-700" />
+                  <div className="w-16 md:w-20 h-16 md:h-20 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-full flex items-center justify-center">
+                    <User className="h-8 md:h-10 w-8 md:w-10 text-white" />
                   </div>
                   <div className="text-center md:text-left">
                     <h2 className="text-xl md:text-2xl font-bold text-gray-900">{driverProfile?.name || 'Driver'}</h2>
@@ -140,10 +273,10 @@ const DriverPortal = () => {
                 </div>
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-900">Account</h3>
-                  <Button className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-all duration-300">
+                  <Button className="w-full bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300">
                     Change Password
                   </Button>
-                  <Button className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-all duration-300">
+                  <Button className="w-full bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300">
                     Update Payment Method
                   </Button>
                 </div>
@@ -176,7 +309,7 @@ const DriverPortal = () => {
                       <p className="text-sm text-gray-600">Today's Earnings</p>
                       <p className="text-xl md:text-2xl font-bold text-green-600">{earnings.today}</p>
                     </div>
-                    <DollarSign className="h-6 md:h-8 w-6 md:w-8 text-green-500" />
+                    <IndianRupee className="h-6 md:h-8 w-6 md:w-8 text-green-500" />
                   </div>
                 </CardContent>
               </Card>
@@ -206,12 +339,43 @@ const DriverPortal = () => {
               </Card>
             </div>
 
+            {/* Recent Booked Rides */}
+            {bookedRides.length > 0 && (
+              <Card className="bg-white border-gray-200">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2 text-gray-900">
+                    <Car className="h-5 w-5 text-indigo-500" />
+                    <span>Recent Bookings</span>
+                    <Badge className="bg-indigo-500 text-white">{bookedRides.length}</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {bookedRides.slice(0, 5).map((ride) => (
+                      <div key={ride.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900">{ride.rider_name || 'Rider'}</p>
+                          <p className="text-xs text-gray-500 truncate">{ride.pickup_address} → {ride.destination_address}</p>
+                        </div>
+                        <p className="text-lg font-bold text-green-600">₹{Number(ride.price).toLocaleString()}</p>
+                      </div>
+                    ))}
+                  </div>
+                  {bookedRides.length > 5 && (
+                    <Button variant="ghost" onClick={() => setActiveTab('rides')} className="w-full mt-3 text-indigo-600">
+                      View all {bookedRides.length} rides
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
             {/* Ride Requests */}
             {isOnline && pendingRequests.length > 0 && (
               <Card className="bg-white border-gray-200">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2 text-gray-900">
-                    <Car className="h-5 w-5 text-blue-500" />
+                    <Car className="h-5 w-5 text-indigo-500" />
                     <span>Incoming Ride Requests</span>
                     {pendingRequestsCount > 0 && (
                       <Badge className="bg-red-500 text-white">{pendingRequestsCount}</Badge>
@@ -233,7 +397,7 @@ const DriverPortal = () => {
               </Card>
             )}
 
-            {!isOnline && (
+            {!isOnline && bookedRides.length === 0 && (
               <Card className="border-2 border-dashed border-gray-300 bg-gray-50">
                 <CardContent className="p-8 md:p-12 text-center">
                   <Car className="h-12 md:h-16 w-12 md:w-16 text-gray-400 mx-auto mb-4" />
@@ -249,7 +413,7 @@ const DriverPortal = () => {
               </Card>
             )}
 
-            {isOnline && pendingRequests.length === 0 && (
+            {isOnline && pendingRequests.length === 0 && bookedRides.length === 0 && (
               <Card className="bg-white border-gray-200">
                 <CardContent className="p-8 md:p-12 text-center">
                   <Car className="h-12 md:h-16 w-12 md:w-16 text-gray-400 mx-auto mb-4" />
@@ -273,10 +437,10 @@ const DriverPortal = () => {
       <div className="w-full md:w-64 bg-gray-50 shadow-lg border-b md:border-r border-gray-200">
         <div className="p-4 md:p-6 border-b border-gray-200">
           <div className="flex items-center space-x-2 mb-4">
-            <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center">
               <Car className="h-4 md:h-6 w-4 md:w-6 text-white" />
             </div>
-            <span className="text-xl md:text-2xl font-bold text-gray-900">Driver</span>
+            <span className="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Drivio</span>
           </div>
           
           {/* Online Status Toggle */}
@@ -302,7 +466,7 @@ const DriverPortal = () => {
               onClick={() => setActiveTab(item.id)}
               className={`w-full flex items-center justify-between px-4 md:px-6 py-3 text-left transition-colors duration-200 ${
                 activeTab === item.id 
-                  ? 'bg-gray-200 text-gray-900 border-r-2 border-gray-900' 
+                  ? 'bg-indigo-50 text-indigo-700 border-r-2 border-indigo-600' 
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -311,19 +475,18 @@ const DriverPortal = () => {
                 <span className="font-medium text-sm md:text-base">{item.label}</span>
               </div>
               {item.badge && (
-                <Badge className="bg-red-500 text-white text-xs">{item.badge}</Badge>
+                <Badge className="bg-indigo-500 text-white text-xs">{item.badge}</Badge>
               )}
             </button>
           ))}
         </nav>
 
-        {/* Only show back to home button for non-settings tabs */}
         {activeTab !== 'settings' && (
           <div className="absolute bottom-0 w-full md:w-64 p-4 md:p-6 border-t border-gray-200 bg-gray-50">
             <Button 
               variant="outline" 
               onClick={() => navigate('/')}
-              className="w-full justify-start text-gray-900 border-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300 font-semibold text-sm md:text-base py-2 md:py-3"
+              className="w-full justify-start text-gray-900 border-gray-900 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 font-semibold text-sm md:text-base py-2 md:py-3"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home

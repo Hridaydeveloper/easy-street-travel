@@ -18,7 +18,7 @@ const Index = () => {
   const features = [{
     icon: <Car className="h-12 w-12 text-white" />,
     title: "Ride Options",
-    description: "There's more than one way to move with Uber, no matter where you are or where you're headed next.",
+    description: "There's more than one way to move with Drivio, no matter where you are or where you're headed next.",
     buttonText: "Search ride options",
     image: rideOptionsImg
   }, {
@@ -40,9 +40,8 @@ const Index = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-black min-h-screen flex items-center pt-16">
-        {/* Background Image */}
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30" style={{
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-black to-violet-950 min-h-screen flex items-center pt-16">
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20" style={{
         backgroundImage: `url('/lovable-uploads/bcd9c71b-8043-4e06-b4a9-686d30d12c76.png')`
       }} />
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
@@ -53,14 +52,14 @@ const Index = () => {
               <div className="space-y-6">
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
                   Go anywhere with
-                  <span className="block text-gray-300">Uber</span>
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">Drivio</span>
                 </h1>
                 <p className="text-xl text-gray-300 max-w-md leading-relaxed">
                   Request a ride, hop in, and go. Or reserve for later so you can relax on the day of your trip.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   {benefits.map((benefit, index) => <div key={index} className="flex items-center space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-white" />
+                      <CheckCircle className="h-5 w-5 text-indigo-400" />
                       <span className="text-sm">{benefit}</span>
                     </div>)}
                 </div>
@@ -71,7 +70,7 @@ const Index = () => {
             
             <div className="hidden lg:block">
               <div className="relative">
-                <img src="/lovable-uploads/dc2b1809-4950-48b0-a818-76730bc701c8.png" alt="Uber Car" className="w-full h-auto rounded-2xl shadow-2xl" />
+                <img src="/lovable-uploads/dc2b1809-4950-48b0-a818-76730bc701c8.png" alt="Drivio Car" className="w-full h-auto rounded-2xl shadow-2xl" />
               </div>
             </div>
           </div>
@@ -83,7 +82,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Use the Uber app to help you travel your way
+              Use the Drivio app to travel your way
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
               Whether you're going to work, the airport, or anywhere else, we've got options to get you there.
@@ -95,12 +94,12 @@ const Index = () => {
                 <CardContent className="p-0">
                   <div className="h-80 relative overflow-hidden">
                     <img src={feature.image} alt={feature.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-indigo-900 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                   </div>
                   <div className="p-8 space-y-6">
                     <h3 className="text-2xl font-bold text-white">{feature.title}</h3>
                     <p className="text-gray-400 leading-relaxed text-lg">{feature.description}</p>
-                    <Button className="bg-white hover:bg-gray-200 text-black px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 group">
+                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 group">
                       {feature.buttonText}
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
@@ -118,10 +117,10 @@ const Index = () => {
             <div className="space-y-8">
               <div className="space-y-6">
                 <h2 className="text-4xl lg:text-5xl font-bold text-white">
-                  About Uber
+                  About Drivio
                 </h2>
                 <p className="text-xl text-gray-300 leading-relaxed">
-                  We reimagine the way the world moves for the better. Movement is what we power. It's our lifeblood. It runs through our veins. It's what gets us out of bed each morning.
+                  We reimagine the way the world moves for the better. Movement is what we power. It's our lifeblood. It runs through our veins.
                 </p>
                 <p className="text-lg text-gray-400 leading-relaxed">
                   Our technology and platform help people move forward. We connect riders to drivers at the tap of a button, helping people get where they want to go.
@@ -129,13 +128,13 @@ const Index = () => {
               </div>
               
               <div className="grid grid-cols-2 gap-6">
-                <div className="text-center p-6 bg-gray-900 rounded-xl">
-                  <Award className="h-12 w-12 text-white mx-auto mb-4" />
+                <div className="text-center p-6 bg-gradient-to-br from-indigo-900/50 to-violet-900/50 rounded-xl border border-indigo-800/30">
+                  <Award className="h-12 w-12 text-indigo-400 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-white mb-2">Excellence</h3>
                   <p className="text-gray-400">Committed to providing the best service</p>
                 </div>
-                <div className="text-center p-6 bg-gray-900 rounded-xl">
-                  <Target className="h-12 w-12 text-white mx-auto mb-4" />
+                <div className="text-center p-6 bg-gradient-to-br from-indigo-900/50 to-violet-900/50 rounded-xl border border-indigo-800/30">
+                  <Target className="h-12 w-12 text-violet-400 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-white mb-2">Innovation</h3>
                   <p className="text-gray-400">Leading technology in transportation</p>
                 </div>
@@ -143,18 +142,18 @@ const Index = () => {
             </div>
             
             <div className="relative">
-              <img src="/lovable-uploads/660b454f-8bfe-4dd4-adb2-e9e8f7ca60d3.png" alt="About Uber" className="w-full h-auto rounded-2xl shadow-2xl" />
+              <img src="/lovable-uploads/660b454f-8bfe-4dd4-adb2-e9e8f7ca60d3.png" alt="About Drivio" className="w-full h-auto rounded-2xl shadow-2xl" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="bg-gray-900 py-20">
+      <section className="bg-gradient-to-r from-indigo-900 to-violet-900 py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4 text-white">Trusted by millions worldwide</h2>
-            <p className="text-gray-400 text-lg">Join the global community that moves with Uber</p>
+            <p className="text-indigo-200 text-lg">Join the global community that moves with Drivio</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[{
@@ -173,7 +172,7 @@ const Index = () => {
                 <div className="text-4xl lg:text-6xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
                   {stat.number}
                 </div>
-                <div className="text-gray-400 text-lg">{stat.label}</div>
+                <div className="text-indigo-200 text-lg">{stat.label}</div>
               </div>)}
           </div>
         </div>
@@ -193,34 +192,32 @@ const Index = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Contact Form */}
               <div className="space-y-6">
                 <div className="space-y-4">
-                  <input type="text" placeholder="Your Name" className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-white focus:outline-none" />
-                  <input type="email" placeholder="Your Email" className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-white focus:outline-none" />
-                  <textarea placeholder="Your Message" rows={6} className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-white focus:outline-none resize-none" />
+                  <input type="text" placeholder="Your Name" className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-indigo-500 focus:outline-none" />
+                  <input type="email" placeholder="Your Email" className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-indigo-500 focus:outline-none" />
+                  <textarea placeholder="Your Message" rows={6} className="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-indigo-500 focus:outline-none resize-none" />
                 </div>
-                <Button className="w-full bg-white text-black hover:bg-gray-200 py-3 transition-all duration-300">
+                <Button className="w-full bg-indigo-600 text-white hover:bg-indigo-700 py-3 transition-all duration-300">
                   Send Message
                 </Button>
               </div>
 
-              {/* Contact Info */}
               <div className="space-y-8">
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="h-6 w-6 text-black" />
+                  <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Mail className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white mb-2">Email Us</h3>
-                    <p className="text-gray-400">support@uber.com</p>
+                    <p className="text-gray-400">support@drivio.com</p>
                     <p className="text-gray-400">dashriday856@gmail.com</p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone className="h-6 w-6 text-black" />
+                  <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Phone className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white mb-2">Call Us</h3>
@@ -230,8 +227,8 @@ const Index = () => {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapIcon className="h-6 w-6 text-black" />
+                  <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <MapIcon className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white mb-2">Visit Us</h3>
@@ -245,20 +242,19 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section - Only show for guests or non-authenticated users */}
+      {/* CTA Section */}
       {(isGuest || !isAuthenticated) && (
-        <section className="py-20 bg-gray-900 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-black opacity-50"></div>
+        <section className="py-20 bg-gradient-to-r from-indigo-900 to-violet-900 relative overflow-hidden">
           <div className="relative container mx-auto px-4 text-center">
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-white">Ready to get started?</h2>
-            <p className="text-xl mb-10 max-w-2xl mx-auto text-gray-400 leading-relaxed">
+            <p className="text-xl mb-10 max-w-2xl mx-auto text-indigo-200 leading-relaxed">
               Join millions of users who trust our platform for their daily commute and travel needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button onClick={() => navigate('/auth')} className="bg-white text-black hover:bg-gray-200 px-10 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
+              <Button onClick={() => navigate('/auth')} className="bg-white text-indigo-900 hover:bg-gray-200 px-10 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
                 Sign up as Rider
               </Button>
-              <Button onClick={() => navigate('/driver-signup')} className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-10 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
+              <Button onClick={() => navigate('/driver-signup')} className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-indigo-900 px-10 py-4 text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
                 Become a Driver
               </Button>
             </div>

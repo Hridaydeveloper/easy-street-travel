@@ -1,27 +1,21 @@
 import React from 'react';
-import { Car, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { Car, Linkedin, Mail, Phone, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 const Footer = () => {
   const navigate = useNavigate();
   const scrollToSection = (sectionId: string) => {
-    // First navigate to home page if not already there
     if (window.location.pathname !== '/') {
       navigate('/');
-      // Wait for navigation to complete, then scroll
       setTimeout(() => {
         const element = document.getElementById(sectionId);
         if (element) {
-          element.scrollIntoView({
-            behavior: 'smooth'
-          });
+          element.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
     } else {
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({
-          behavior: 'smooth'
-        });
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }
   };
@@ -30,96 +24,62 @@ const Footer = () => {
   };
   const footerSections = [{
     title: "Company",
-    links: [{
-      name: "About Us",
-      action: () => scrollToSection('about')
-    }, {
-      name: "Our Team",
-      action: () => navigate('/our-team')
-    }, {
-      name: "Careers",
-      action: () => navigate('/careers')
-    }, {
-      name: "Press",
-      action: () => navigate('/press')
-    }]
+    links: [
+      { name: "About Us", action: () => scrollToSection('about') },
+      { name: "Our Team", action: () => navigate('/our-team') },
+      { name: "Careers", action: () => navigate('/careers') },
+      { name: "Press", action: () => navigate('/press') }
+    ]
   }, {
     title: "Products",
-    links: [{
-      name: "Ride",
-      action: () => navigate('/ride')
-    }, {
-      name: "Drive",
-      action: () => navigate('/drive')
-    }, {
-      name: "Business",
-      action: () => navigate('/business')
-    }, {
-      name: "Freight",
-      action: () => navigate('/freight')
-    }]
+    links: [
+      { name: "Ride", action: () => navigate('/ride') },
+      { name: "Drive", action: () => navigate('/drive') },
+      { name: "Business", action: () => navigate('/business') },
+      { name: "Freight", action: () => navigate('/freight') }
+    ]
   }, {
     title: "Global citizenship",
-    links: [{
-      name: "Safety",
-      action: () => navigate('/safety')
-    }, {
-      name: "Diversity",
-      action: () => navigate('/diversity')
-    }, {
-      name: "Transparency",
-      action: () => navigate('/transparency')
-    }, {
-      name: "Sustainability",
-      action: () => navigate('/sustainability')
-    }]
+    links: [
+      { name: "Safety", action: () => navigate('/safety') },
+      { name: "Diversity", action: () => navigate('/diversity') },
+      { name: "Transparency", action: () => navigate('/transparency') },
+      { name: "Sustainability", action: () => navigate('/sustainability') }
+    ]
   }, {
     title: "Travel",
-    links: [{
-      name: "Airports",
-      action: () => navigate('/airports')
-    }, {
-      name: "Cities",
-      action: () => navigate('/cities')
-    }, {
-      name: "Estimates",
-      action: () => navigate('/estimates')
-    }, {
-      name: "Gift cards",
-      action: () => navigate('/gift-cards')
-    }]
+    links: [
+      { name: "Airports", action: () => navigate('/airports') },
+      { name: "Cities", action: () => navigate('/cities') },
+      { name: "Estimates", action: () => navigate('/estimates') },
+      { name: "Gift cards", action: () => navigate('/gift-cards') }
+    ]
   }];
-  return <footer className="bg-black text-white">
+  return <footer className="bg-gradient-to-b from-gray-900 to-black text-white">
       <div className="container mx-auto px-4 py-16">
-        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
-          {/* Logo and Description */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                <Car className="h-6 w-6 text-black" />
+              <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center">
+                <Car className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold">Uber</span>
+              <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">Drivio</span>
             </div>
             <p className="text-gray-300 leading-relaxed max-w-md">
-              Move the way you want. Uber is evolving the way the world moves. By seamlessly connecting riders to drivers through our apps, we make cities more accessible, opening up more possibilities for riders and more business for drivers.
+              Move the way you want. Drivio is evolving the way the world moves. By seamlessly connecting riders to drivers through our apps, we make cities more accessible.
             </p>
             <div className="flex space-x-4">
-              
-              
-              
-              <div onClick={handleSocialClick} className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer transition-colors">
+              <div onClick={handleSocialClick} className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-indigo-600 cursor-pointer transition-colors">
                 <Linkedin className="h-5 w-5" />
               </div>
             </div>
           </div>
 
-          {/* Footer Links */}
           {footerSections.map((section, index) => <div key={index} className="space-y-4">
               <h3 className="text-lg font-semibold">{section.title}</h3>
               <ul className="space-y-3">
                 {section.links.map((link, linkIndex) => <li key={linkIndex}>
-                    <button onClick={link.action} className="text-gray-300 hover:text-white transition-colors duration-200 text-left">
+                    <button onClick={link.action} className="text-gray-300 hover:text-indigo-400 transition-colors duration-200 text-left">
                       {link.name}
                     </button>
                   </li>)}
@@ -127,7 +87,6 @@ const Footer = () => {
             </div>)}
         </div>
 
-        {/* Contact Information */}
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex items-center space-x-3">
@@ -160,7 +119,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Footer */}
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-wrap gap-6 mb-4 md:mb-0">
             <button onClick={() => navigate('/privacy')} className="text-gray-300 hover:text-white transition-colors text-sm">
@@ -176,7 +134,7 @@ const Footer = () => {
               Accessibility
             </button>
           </div>
-          <p className="text-gray-400 text-sm">© 2025 Uber Clone Hriday. All rights reserved.</p>
+          <p className="text-gray-400 text-sm">© 2025 Drivio by Hriday. All rights reserved.</p>
         </div>
       </div>
     </footer>;

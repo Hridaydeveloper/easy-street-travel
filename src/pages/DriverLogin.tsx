@@ -15,7 +15,6 @@ const DriverLogin = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (name && email) {
-      // Store driver info in localStorage for the profile
       localStorage.setItem('driverProfile', JSON.stringify({
         name,
         email,
@@ -26,8 +25,7 @@ const DriverLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      {/* Background Image */}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-black to-violet-950 flex items-center justify-center p-4">
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
         style={{
@@ -39,11 +37,11 @@ const DriverLogin = () => {
         <Card className="bg-gray-900/95 backdrop-blur-md border-gray-700">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-full flex items-center justify-center">
                 <Car className="h-8 w-8 text-white" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-white">Driver Login</CardTitle>
+            <CardTitle className="text-2xl font-bold text-white">Drivio Driver Login</CardTitle>
             <p className="text-gray-400">Enter your details to access the driver portal</p>
           </CardHeader>
           <CardContent>
@@ -74,7 +72,7 @@ const DriverLogin = () => {
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
               >
                 Login to Driver Portal
               </Button>

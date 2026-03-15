@@ -12,17 +12,13 @@ const Press = () => {
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold text-gray-900 mb-8">Press</h1>
             <div className="prose prose-lg max-w-none">
-              <p className="text-gray-600 text-lg mb-6">
-                Stay updated with the latest news and announcements from Uber.
-              </p>
+              <p className="text-gray-600 text-lg mb-6">Stay updated with the latest news from Drivio.</p>
               <p className="text-gray-600 mb-6">
                 For media inquiries, press releases, and company updates, this is your go-to resource 
-                for all things Uber. We're committed to transparency and keeping the public informed 
-                about our progress, initiatives, and impact on communities worldwide.
+                for all things Drivio.
               </p>
               <p className="text-gray-600">
-                Contact our press team for interviews, statements, and exclusive access to company 
-                executives and thought leaders.
+                Contact our press team for interviews, statements, and exclusive access.
               </p>
             </div>
           </div>

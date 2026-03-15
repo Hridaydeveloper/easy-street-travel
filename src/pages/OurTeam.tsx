@@ -13,16 +13,14 @@ const OurTeam = () => {
             <h1 className="text-4xl font-bold text-gray-900 mb-8">Our Team</h1>
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-600 text-lg mb-6">
-                Meet the passionate individuals who drive Uber's mission to reimagine the way the world moves.
+                Meet the passionate individuals who drive Drivio's mission to reimagine the way the world moves.
               </p>
               <p className="text-gray-600 mb-6">
                 Our diverse team of engineers, designers, product managers, and business leaders work together 
-                to create innovative transportation solutions that connect millions of people around the world.
+                to create innovative transportation solutions.
               </p>
               <p className="text-gray-600">
-                From our headquarters in San Francisco to offices around the globe, we're united by our 
-                commitment to safety, reliability, and creating economic opportunities for millions of drivers 
-                and delivery partners.
+                United by our commitment to safety, reliability, and creating economic opportunities for millions.
               </p>
             </div>
           </div>

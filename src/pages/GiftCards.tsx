@@ -12,17 +12,13 @@ const GiftCards = () => {
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold text-gray-900 mb-8">Gift Cards</h1>
             <div className="prose prose-lg max-w-none">
-              <p className="text-gray-600 text-lg mb-6">
-                Give the gift of convenient transportation.
-              </p>
+              <p className="text-gray-600 text-lg mb-6">Give the gift of convenient transportation.</p>
               <p className="text-gray-600 mb-6">
-                Uber gift cards make perfect gifts for friends, family, or colleagues. They can 
-                be used for rides, Uber Eats orders, and other Uber services. Gift cards are 
-                available in various denominations and can be purchased online or at select retailers.
+                Drivio gift cards make perfect gifts for friends, family, or colleagues. They can 
+                be used for rides and other Drivio services.
               </p>
               <p className="text-gray-600">
-                Perfect for birthdays, holidays, graduations, or any occasion when you want to 
-                give someone the freedom to get around easily.
+                Perfect for birthdays, holidays, graduations, or any occasion.
               </p>
             </div>
           </div>

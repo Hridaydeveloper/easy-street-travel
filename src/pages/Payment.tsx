@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowLeft, MapPin, CreditCard, IndianRupee, Clock, User, Phone, Mail, Car, Users, Crown } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LocationData {
   address: string;
@@ -40,6 +41,32 @@ const Payment = () => {
 
   const handlePayment = async () => {
     setIsBooking(true);
+    try {
+      // Get current user session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await supabase.from('rides').insert({
+          rider_id: session.user.id,
+          rider_name: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
+          rider_email: user?.email || session.user.email,
+          rider_phone: user?.phone || '',
+          pickup_address: rideDetails.pickup.address,
+          pickup_lat: rideDetails.pickup.coordinates?.lat,
+          pickup_lng: rideDetails.pickup.coordinates?.lng,
+          destination_address: rideDetails.destination.address,
+          destination_lat: rideDetails.destination.coordinates?.lat,
+          destination_lng: rideDetails.destination.coordinates?.lng,
+          ride_option_id: rideDetails.rideOption?.id,
+          ride_option_name: rideDetails.rideOption?.name,
+          price: rideDetails.price,
+          distance: rideDetails.distance,
+          duration: rideDetails.duration,
+          status: 'booked'
+        } as any);
+      }
+    } catch (error) {
+      console.error('Error saving ride:', error);
+    }
     setTimeout(() => {
       setIsBooking(false);
       setIsBooked(true);
@@ -48,10 +75,10 @@ const Payment = () => {
 
   const getRideIcon = (rideOptionId: string) => {
     switch (rideOptionId) {
-      case 'ubergo': return <Car className="h-8 w-8" />;
-      case 'uberpremier': return <Car className="h-8 w-8" />;
-      case 'uberxl': return <Users className="h-8 w-8" />;
-      case 'uberblack': return <Crown className="h-8 w-8" />;
+      case 'drivio-go': return <Car className="h-8 w-8" />;
+      case 'drivio-premier': return <Car className="h-8 w-8" />;
+      case 'drivio-xl': return <Users className="h-8 w-8" />;
+      case 'drivio-black': return <Crown className="h-8 w-8" />;
       default: return <Car className="h-8 w-8" />;
     }
   };
@@ -83,7 +110,7 @@ const Payment = () => {
                 </div>
               </CardContent>
             </Card>
-            <Button onClick={() => navigate('/dashboard')} className="w-full bg-black text-white hover:bg-gray-800">
+            <Button onClick={() => navigate('/dashboard')} className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
               Go to Dashboard
             </Button>
           </div>
@@ -210,7 +237,7 @@ const Payment = () => {
             <Button
               onClick={handlePayment}
               disabled={isBooking}
-              className="w-full bg-black text-white hover:bg-gray-800 py-3"
+              className="w-full bg-indigo-600 text-white hover:bg-indigo-700 py-3"
             >
               {isBooking ? (
                 <div className="flex items-center space-x-2">

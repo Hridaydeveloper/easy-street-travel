@@ -47,6 +47,72 @@ export type Database = {
         }
         Relationships: []
       }
+      rides: {
+        Row: {
+          created_at: string
+          destination_address: string
+          destination_lat: number | null
+          destination_lng: number | null
+          distance: number | null
+          driver_id: string | null
+          duration: string | null
+          id: string
+          pickup_address: string
+          pickup_lat: number | null
+          pickup_lng: number | null
+          price: number
+          ride_option_id: string | null
+          ride_option_name: string | null
+          rider_email: string | null
+          rider_id: string
+          rider_name: string | null
+          rider_phone: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          destination_address: string
+          destination_lat?: number | null
+          destination_lng?: number | null
+          distance?: number | null
+          driver_id?: string | null
+          duration?: string | null
+          id?: string
+          pickup_address: string
+          pickup_lat?: number | null
+          pickup_lng?: number | null
+          price: number
+          ride_option_id?: string | null
+          ride_option_name?: string | null
+          rider_email?: string | null
+          rider_id: string
+          rider_name?: string | null
+          rider_phone?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          destination_address?: string
+          destination_lat?: number | null
+          destination_lng?: number | null
+          distance?: number | null
+          driver_id?: string | null
+          duration?: string | null
+          id?: string
+          pickup_address?: string
+          pickup_lat?: number | null
+          pickup_lng?: number | null
+          price?: number
+          ride_option_id?: string | null
+          ride_option_name?: string | null
+          rider_email?: string | null
+          rider_id?: string
+          rider_name?: string | null
+          rider_phone?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

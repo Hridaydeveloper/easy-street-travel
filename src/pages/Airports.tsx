@@ -12,17 +12,13 @@ const Airports = () => {
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold text-gray-900 mb-8">Airports</h1>
             <div className="prose prose-lg max-w-none">
-              <p className="text-gray-600 text-lg mb-6">
-                Seamless airport transportation worldwide.
-              </p>
+              <p className="text-gray-600 text-lg mb-6">Seamless airport transportation worldwide.</p>
               <p className="text-gray-600 mb-6">
-                Get to and from airports with ease using Uber. We operate at hundreds of airports 
-                around the world, providing reliable transportation options for travelers. Whether 
-                you're catching an early flight or arriving late at night, Uber is there when you need us.
+                Get to and from airports with ease using Drivio. We operate at hundreds of airports 
+                around the world, providing reliable transportation for travelers.
               </p>
               <p className="text-gray-600">
-                Check pickup locations, estimated travel times, and fare estimates for airport 
-                trips in your city through the Uber app.
+                Check pickup locations, estimated travel times, and fare estimates through the Drivio app.
               </p>
             </div>
           </div>

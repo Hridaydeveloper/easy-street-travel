@@ -125,8 +125,8 @@ const Payment = () => {
                 </div>
               </CardContent>
             </Card>
-            <Button onClick={() => navigate('/dashboard')} className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
-              Go to Dashboard
+            <Button onClick={() => navigate('/')} className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
+              Go to Home
             </Button>
           </div>
         </div>

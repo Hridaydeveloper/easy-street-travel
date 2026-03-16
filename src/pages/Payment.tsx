@@ -8,6 +8,7 @@ import { ArrowLeft, MapPin, CreditCard, IndianRupee, Clock, User, Phone, Mail, C
 import Navigation from "@/components/Navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface LocationData {
   address: string;
@@ -28,6 +29,7 @@ const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { toast } = useToast();
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [isBooking, setIsBooking] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
@@ -42,35 +44,48 @@ const Payment = () => {
   const handlePayment = async () => {
     setIsBooking(true);
     try {
-      // Get current user session
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        await supabase.from('rides').insert({
-          rider_id: session.user.id,
-          rider_name: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
-          rider_email: user?.email || session.user.email,
-          rider_phone: user?.phone || '',
-          pickup_address: rideDetails.pickup.address,
-          pickup_lat: rideDetails.pickup.coordinates?.lat,
-          pickup_lng: rideDetails.pickup.coordinates?.lng,
-          destination_address: rideDetails.destination.address,
-          destination_lat: rideDetails.destination.coordinates?.lat,
-          destination_lng: rideDetails.destination.coordinates?.lng,
-          ride_option_id: rideDetails.rideOption?.id,
-          ride_option_name: rideDetails.rideOption?.name,
-          price: rideDetails.price,
-          distance: rideDetails.distance,
-          duration: rideDetails.duration,
-          status: 'booked'
-        } as any);
+      if (!session) {
+        toast({ title: "Please login first", variant: "destructive" });
+        setIsBooking(false);
+        navigate('/auth');
+        return;
       }
-    } catch (error) {
-      console.error('Error saving ride:', error);
-    }
-    setTimeout(() => {
+
+      const { error } = await supabase.from('rides').insert({
+        rider_id: session.user.id,
+        rider_name: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
+        rider_email: user?.email || session.user.email,
+        rider_phone: user?.phone || '',
+        pickup_address: rideDetails.pickup.address,
+        pickup_lat: rideDetails.pickup.coordinates?.lat,
+        pickup_lng: rideDetails.pickup.coordinates?.lng,
+        destination_address: rideDetails.destination.address,
+        destination_lat: rideDetails.destination.coordinates?.lat,
+        destination_lng: rideDetails.destination.coordinates?.lng,
+        ride_option_id: rideDetails.rideOption?.id,
+        ride_option_name: rideDetails.rideOption?.name,
+        price: rideDetails.price,
+        distance: rideDetails.distance,
+        duration: rideDetails.duration,
+        status: 'booked'
+      } as any);
+
+      if (error) {
+        console.error('Error saving ride:', error);
+        toast({ title: "Booking failed", description: error.message, variant: "destructive" });
+        setIsBooking(false);
+        return;
+      }
+
       setIsBooking(false);
       setIsBooked(true);
-    }, 2000);
+      toast({ title: "Ride booked successfully!" });
+    } catch (error) {
+      console.error('Error saving ride:', error);
+      toast({ title: "Booking failed", variant: "destructive" });
+      setIsBooking(false);
+    }
   };
 
   const getRideIcon = (rideOptionId: string) => {
@@ -247,7 +262,7 @@ const Payment = () => {
               ) : (
                 <>
                   <Clock className="h-4 w-4 mr-2" />
-                  Book Ride - ₹{rideDetails.price}
+                  Confirm Ride - ₹{rideDetails.price}
                 </>
               )}
             </Button>

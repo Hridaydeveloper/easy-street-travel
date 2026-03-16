@@ -4,20 +4,30 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Car, ArrowLeft } from "lucide-react";
+import { Car, ArrowLeft, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+const ALLOWED_DRIVER_EMAIL = 'dashriday856@gmail.com';
 
 const DriverLogin = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    
+    if (email.toLowerCase() !== ALLOWED_DRIVER_EMAIL) {
+      setError("You don't have a driver dashboard account. Create one first.");
+      return;
+    }
+
     if (name && email) {
       localStorage.setItem('driverProfile', JSON.stringify({
         name,
-        email,
+        email: email.toLowerCase(),
         isLoggedIn: true
       }));
       navigate('/driver-portal');
@@ -45,6 +55,12 @@ const DriverLogin = () => {
             <p className="text-gray-400">Enter your details to access the driver portal</p>
           </CardHeader>
           <CardContent>
+            {error && (
+              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center space-x-2">
+                <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0" />
+                <p className="text-red-400 text-sm">{error}</p>
+              </div>
+            )}
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-white">Full Name</Label>

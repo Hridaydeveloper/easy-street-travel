@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,8 +24,16 @@ const Auth = ({ onSkip }: AuthProps) => {
   });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [signupSuccess, setSignupSuccess] = useState(false);
   const navigate = useNavigate();
-  const { login, signup, setGuestMode } = useAuth();
+  const { login, signup, setGuestMode, isAuthenticated } = useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,11 +49,7 @@ const Auth = ({ onSkip }: AuthProps) => {
     }
     
     setIsSubmitting(false);
-    if (onSkip) {
-      onSkip();
-    } else {
-      navigate('/dashboard');
-    }
+    // Navigation will happen via the useEffect above when isAuthenticated becomes true
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -66,11 +70,7 @@ const Auth = ({ onSkip }: AuthProps) => {
     }
     
     setIsSubmitting(false);
-    if (onSkip) {
-      onSkip();
-    } else {
-      navigate('/');
-    }
+    setSignupSuccess(true);
   };
 
   const handleSkip = () => {
@@ -137,6 +137,12 @@ const Auth = ({ onSkip }: AuthProps) => {
               <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center space-x-2">
                 <AlertCircle className="h-5 w-5 text-red-400" />
                 <p className="text-red-400 text-sm">{error}</p>
+              </div>
+            )}
+
+            {signupSuccess && (
+              <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
+                <p className="text-green-400 text-sm">Account created! Please check your email to confirm your account, then sign in.</p>
               </div>
             )}
 

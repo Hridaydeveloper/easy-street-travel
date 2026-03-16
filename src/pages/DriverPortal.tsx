@@ -31,18 +31,34 @@ interface BookedRide {
   created_at: string;
 }
 
+const ALLOWED_DRIVER_EMAIL = 'dashriday856@gmail.com';
+
 const DriverPortal = () => {
-  const [isOnline, setIsOnline] = useState(false);
+  const [isOnline, setIsOnline] = useState(() => {
+    const stored = localStorage.getItem('driverOnlineStatus');
+    return stored === 'true';
+  });
   const [activeTab, setActiveTab] = useState('dashboard');
   const [driverProfile, setDriverProfile] = useState<DriverProfile | null>(null);
   const [bookedRides, setBookedRides] = useState<BookedRide[]>([]);
   const navigate = useNavigate();
   const { rideRequests, acceptRide, declineRide, pendingRequestsCount } = useRideRequest();
 
+  // Persist online status
+  useEffect(() => {
+    localStorage.setItem('driverOnlineStatus', String(isOnline));
+  }, [isOnline]);
+
   useEffect(() => {
     const stored = localStorage.getItem('driverProfile');
     if (stored) {
-      setDriverProfile(JSON.parse(stored));
+      const profile = JSON.parse(stored);
+      if (profile.email?.toLowerCase() !== ALLOWED_DRIVER_EMAIL) {
+        localStorage.removeItem('driverProfile');
+        navigate('/driver-login');
+        return;
+      }
+      setDriverProfile(profile);
     } else {
       navigate('/driver-login');
     }

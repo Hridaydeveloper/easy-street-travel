@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
@@ -31,38 +31,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isGuest, setIsGuest] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchProfile = async (supabaseUser: SupabaseUser) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('user_id', supabaseUser.id)
-      .single();
+  const buildUserFromMetadata = (supabaseUser: SupabaseUser): UserProfile => ({
+    id: supabaseUser.id,
+    firstName: supabaseUser.user_metadata?.first_name || '',
+    lastName: supabaseUser.user_metadata?.last_name || '',
+    email: supabaseUser.email || '',
+    phone: supabaseUser.user_metadata?.phone || '',
+  });
 
-    if (data) {
-      setUser({
-        id: supabaseUser.id,
-        firstName: data.first_name || '',
-        lastName: data.last_name || '',
-        email: supabaseUser.email || '',
-        phone: data.phone || '',
-      });
-    } else {
-      setUser({
-        id: supabaseUser.id,
-        firstName: supabaseUser.user_metadata?.first_name || '',
-        lastName: supabaseUser.user_metadata?.last_name || '',
-        email: supabaseUser.email || '',
-        phone: supabaseUser.user_metadata?.phone || '',
-      });
+  const fetchProfile = useCallback(async (supabaseUser: SupabaseUser) => {
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', supabaseUser.id)
+        .single();
+
+      if (data) {
+        setUser({
+          id: supabaseUser.id,
+          firstName: data.first_name || '',
+          lastName: data.last_name || '',
+          email: supabaseUser.email || '',
+          phone: data.phone || '',
+        });
+      } else {
+        setUser(buildUserFromMetadata(supabaseUser));
+      }
+    } catch {
+      setUser(buildUserFromMetadata(supabaseUser));
     }
-  };
+  }, []);
 
   useEffect(() => {
+    // Get initial session first
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      if (currentSession?.user) {
+        fetchProfile(currentSession.user).then(() => setIsLoading(false));
+        setIsGuest(false);
+      } else {
+        setIsLoading(false);
+      }
+    });
+
+    // Then set up listener for future changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
+      (event, newSession) => {
         setSession(newSession);
         if (newSession?.user) {
-          await fetchProfile(newSession.user);
+          // Defer async work to avoid Supabase deadlock
+          setTimeout(() => {
+            fetchProfile(newSession.user!);
+          }, 0);
           setIsGuest(false);
         } else {
           setUser(null);
@@ -71,17 +92,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     );
 
-    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
-      setSession(currentSession);
-      if (currentSession?.user) {
-        fetchProfile(currentSession.user);
-        setIsGuest(false);
-      }
-      setIsLoading(false);
-    });
-
     return () => subscription.unsubscribe();
-  }, []);
+  }, [fetchProfile]);
 
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });

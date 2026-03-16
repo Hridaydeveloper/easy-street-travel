@@ -23,7 +23,19 @@ interface AuthContextType {
   setGuestMode: (isGuest: boolean) => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const defaultAuthContext: AuthContextType = {
+  user: null,
+  session: null,
+  isAuthenticated: false,
+  isGuest: false,
+  isLoading: true,
+  login: async () => ({ error: 'Not initialized' }),
+  signup: async () => ({ error: 'Not initialized' }),
+  logout: async () => {},
+  setGuestMode: () => {},
+};
+
+const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(null);

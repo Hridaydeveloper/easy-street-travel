@@ -21,7 +21,7 @@ const Index = () => {
     if (sessionStorage.getItem('justLoggedIn') === 'true') {
       sessionStorage.removeItem('justLoggedIn');
       toast({
-        title: "Welcome back! 🚗",
+        title: "Welcome back!",
         description: "Now you can start your journey — enter your pickup & destination above!",
       });
     }

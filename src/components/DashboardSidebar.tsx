@@ -52,7 +52,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ activeTab, setActiv
     <div className="w-full md:w-64 bg-white shadow-lg border-r border-gray-200 min-h-screen">
       <div className="p-4 md:p-6 border-b border-gray-200">
         <div className="flex items-center justify-center md:justify-start space-x-2">
-          <span className="text-xl md:text-2xl font-bold text-[#4f2aa7]">​Drivio</span>
+          <span className="text-xl md:text-2xl font-bold text-[#6e42d7]">​Drivio</span>
         </div>
       </div>
 

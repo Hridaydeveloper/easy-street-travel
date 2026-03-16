@@ -31,6 +31,7 @@ const Auth = ({ onSkip }: AuthProps) => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
+      sessionStorage.setItem('justLoggedIn', 'true');
       navigate('/');
     }
   }, [isAuthenticated, navigate]);

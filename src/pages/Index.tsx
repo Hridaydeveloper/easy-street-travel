@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Car, Users, Star, Shield, Clock, ArrowRight, CheckCircle, Mail, Phone, MapIcon, Award, Target, Heart } from "lucide-react";
@@ -7,6 +7,7 @@ import Navigation from "@/components/Navigation";
 import RideBookingForm from "@/components/RideBookingForm";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import rideOptionsImg from "@/assets/ride-options.jpg";
 import airportRidesImg from "@/assets/airport-rides.jpg";
 import cityRidesImg from "@/assets/city-rides.jpg";
@@ -14,6 +15,17 @@ import cityRidesImg from "@/assets/city-rides.jpg";
 const Index = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isGuest } = useAuth();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (sessionStorage.getItem('justLoggedIn') === 'true') {
+      sessionStorage.removeItem('justLoggedIn');
+      toast({
+        title: "Welcome back! 🚗",
+        description: "Now you can start your journey — enter your pickup & destination above!",
+      });
+    }
+  }, [toast]);
 
   const features = [{
     icon: <Car className="h-12 w-12 text-white" />,

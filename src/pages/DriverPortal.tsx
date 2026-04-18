@@ -128,59 +128,60 @@ const DriverPortal = () => {
                 {bookedRides.map((ride) => (
                   <Card key={ride.id} className="bg-white border-gray-200 hover:shadow-md transition-shadow">
                     <CardContent className="p-4 md:p-6">
-                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                        <div className="space-y-3 flex-1">
-                          <div className="flex items-center space-x-2">
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 min-w-0">
+                        <div className="space-y-3 flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <Badge className={ride.status === 'booked' ? 'bg-green-500 text-white' : 'bg-gray-400 text-white'}>
                               {ride.status.toUpperCase()}
                             </Badge>
-                            <span className="text-sm text-gray-500">{new Date(ride.created_at).toLocaleString()}</span>
+                            <span className="text-xs sm:text-sm text-gray-500 break-words">{new Date(ride.created_at).toLocaleString()}</span>
                           </div>
-                          
+
                           <div className="space-y-2">
-                            <div className="flex items-start space-x-2">
+                            <div className="flex items-start space-x-2 min-w-0">
                               <div className="w-3 h-3 bg-green-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                              <div>
+                              <div className="min-w-0">
                                 <p className="text-xs text-gray-500">Pickup</p>
-                                <p className="text-sm text-gray-800 font-medium">{ride.pickup_address}</p>
+                                <p className="text-sm text-gray-800 font-medium break-words">{ride.pickup_address}</p>
                               </div>
                             </div>
-                            <div className="flex items-start space-x-2">
+                            <div className="flex items-start space-x-2 min-w-0">
                               <div className="w-3 h-3 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                              <div>
+                              <div className="min-w-0">
                                 <p className="text-xs text-gray-500">Destination</p>
-                                <p className="text-sm text-gray-800 font-medium">{ride.destination_address}</p>
+                                <p className="text-sm text-gray-800 font-medium break-words">{ride.destination_address}</p>
                               </div>
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap gap-4 pt-2 border-t border-gray-100">
-                            <div>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-gray-100">
+                            <div className="min-w-0">
                               <p className="text-xs text-gray-500">Rider</p>
-                              <p className="text-sm font-medium text-gray-800">{ride.rider_name || 'N/A'}</p>
+                              <p className="text-sm font-medium text-gray-800 truncate">{ride.rider_name || 'N/A'}</p>
                             </div>
-                            <div>
+                            <div className="min-w-0">
                               <p className="text-xs text-gray-500">Phone</p>
-                              <p className="text-sm font-medium text-gray-800">{ride.rider_phone || 'N/A'}</p>
+                              <p className="text-sm font-medium text-gray-800 truncate">{ride.rider_phone || 'N/A'}</p>
                             </div>
-                            <div>
+                            <div className="min-w-0">
                               <p className="text-xs text-gray-500">Email</p>
-                              <p className="text-sm font-medium text-gray-800">{ride.rider_email || 'N/A'}</p>
+                              <p className="text-sm font-medium text-gray-800 truncate">{ride.rider_email || 'N/A'}</p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex flex-row md:flex-col items-center md:items-end gap-3 md:gap-1">
-                          <div className="text-right">
-                            <p className="text-xs text-gray-500">Ride Type</p>
-                            <p className="text-sm font-semibold text-indigo-600">{ride.ride_option_name || 'Standard'}</p>
+                        <div className="grid grid-cols-3 lg:grid-cols-1 gap-3 lg:gap-1 lg:items-end lg:text-right shrink-0 pt-3 lg:pt-0 border-t lg:border-t-0 border-gray-100">
+                          <div className="min-w-0">
+                            <p className="text-xs text-gray-500">Ride</p>
+                            <p className="text-sm font-semibold text-indigo-600 truncate">{ride.ride_option_name || 'Standard'}</p>
                           </div>
-                          <div className="text-right">
+                          <div className="min-w-0">
                             <p className="text-xs text-gray-500">Distance</p>
-                            <p className="text-sm font-medium">{ride.distance ? `${Number(ride.distance).toFixed(1)} km` : 'N/A'}</p>
+                            <p className="text-sm font-medium truncate">{ride.distance ? `${Number(ride.distance).toFixed(1)} km` : 'N/A'}</p>
                           </div>
-                          <div className="text-right">
-                            <p className="text-2xl font-bold text-green-600">₹{Number(ride.price).toLocaleString()}</p>
+                          <div className="min-w-0">
+                            <p className="text-xs text-gray-500">Fare</p>
+                            <p className="text-lg sm:text-xl font-bold text-green-600 truncate">₹{Number(ride.price).toLocaleString()}</p>
                           </div>
                         </div>
                       </div>
@@ -448,23 +449,25 @@ const DriverPortal = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col md:flex-row">
+    <div className="min-h-screen bg-white flex flex-col md:flex-row overflow-x-hidden">
       {/* Sidebar */}
-      <div className="w-full md:w-64 bg-gray-50 shadow-lg border-b md:border-r border-gray-200">
+      <aside className="w-full md:w-64 md:min-h-screen bg-gray-50 shadow-lg border-b md:border-r border-gray-200 flex flex-col">
         <div className="p-4 md:p-6 border-b border-gray-200">
           <div className="flex items-center space-x-2 mb-4">
-            <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center shrink-0">
               <Car className="h-4 md:h-6 w-4 md:w-6 text-white" />
             </div>
-            <span className="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Drivio</span>
+            <span className="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 truncate">
+              Drivio
+            </span>
           </div>
-          
+
           {/* Online Status Toggle */}
-          <div className="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
-            <span className="font-medium text-gray-900 text-sm md:text-base">Online Status</span>
-            <div className="flex items-center space-x-2">
-              <Switch 
-                checked={isOnline} 
+          <div className="flex items-center justify-between gap-2 p-3 bg-gray-100 rounded-lg">
+            <span className="font-medium text-gray-900 text-sm md:text-base truncate">Online Status</span>
+            <div className="flex items-center space-x-2 shrink-0">
+              <Switch
+                checked={isOnline}
                 onCheckedChange={setIsOnline}
                 className="data-[state=checked]:bg-green-500"
               />
@@ -475,46 +478,46 @@ const DriverPortal = () => {
           </div>
         </div>
 
-        <nav className="mt-6">
-          {sidebarItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center justify-between px-4 md:px-6 py-3 text-left transition-colors duration-200 ${
-                activeTab === item.id 
-                  ? 'bg-indigo-50 text-indigo-700 border-r-2 border-indigo-600' 
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                {item.icon}
-                <span className="font-medium text-sm md:text-base">{item.label}</span>
-              </div>
-              {item.badge && (
-                <Badge className="bg-indigo-500 text-white text-xs">{item.badge}</Badge>
-              )}
-            </button>
-          ))}
+        <nav className="flex-1 mt-2 md:mt-6 overflow-x-auto md:overflow-x-visible">
+          <div className="flex md:flex-col">
+            {sidebarItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex-1 md:flex-none flex items-center justify-between px-3 md:px-6 py-3 text-left transition-colors duration-200 whitespace-nowrap ${
+                  activeTab === item.id
+                    ? 'bg-indigo-50 text-indigo-700 md:border-r-2 md:border-indigo-600'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <div className="flex items-center space-x-2 md:space-x-3 min-w-0">
+                  {item.icon}
+                  <span className="font-medium text-xs md:text-base truncate">{item.label}</span>
+                </div>
+                {item.badge && (
+                  <Badge className="bg-indigo-500 text-white text-xs ml-2 shrink-0">{item.badge}</Badge>
+                )}
+              </button>
+            ))}
+          </div>
         </nav>
 
-        {activeTab !== 'settings' && (
-          <div className="absolute bottom-0 w-full md:w-64 p-4 md:p-6 border-t border-gray-200 bg-gray-50">
-            <Button 
-              variant="outline" 
-              onClick={() => navigate('/')}
-              className="w-full justify-start text-gray-900 border-gray-900 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 font-semibold text-sm md:text-base py-2 md:py-3"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
-            </Button>
-          </div>
-        )}
-      </div>
+        <div className="p-4 md:p-6 border-t border-gray-200 bg-gray-50">
+          <Button
+            variant="outline"
+            onClick={() => navigate('/')}
+            className="w-full justify-center md:justify-start text-gray-900 border-gray-900 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-300 font-semibold text-sm md:text-base"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
+        </div>
+      </aside>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 md:p-8 bg-white">
+      <main className="flex-1 p-3 sm:p-4 md:p-8 bg-white min-w-0 overflow-x-hidden">
         {renderContent()}
-      </div>
+      </main>
     </div>
   );
 };

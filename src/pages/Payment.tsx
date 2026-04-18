@@ -52,7 +52,7 @@ const Payment = () => {
         return;
       }
 
-      const { error } = await supabase.from('rides').insert({
+      const { data, error } = await supabase.from('rides').insert({
         rider_id: session.user.id,
         rider_name: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
         rider_email: user?.email || session.user.email,
@@ -69,7 +69,7 @@ const Payment = () => {
         distance: rideDetails.distance,
         duration: rideDetails.duration,
         status: 'booked'
-      } as any);
+      } as any).select('id').single();
 
       if (error) {
         console.error('Error saving ride:', error);
@@ -81,6 +81,11 @@ const Payment = () => {
       setIsBooking(false);
       setIsBooked(true);
       toast({ title: "Ride booked successfully!" });
+
+      // Navigate to live tracking
+      if (data?.id) {
+        setTimeout(() => navigate(`/track-ride/${data.id}`), 1200);
+      }
     } catch (error) {
       console.error('Error saving ride:', error);
       toast({ title: "Booking failed", variant: "destructive" });
@@ -135,96 +140,96 @@ const Payment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       <Navigation />
       <div className="pt-16">
-        <div className="bg-gray-50 border-b border-gray-200 p-4">
+        <div className="bg-gray-50 border-b border-gray-200 p-3 sm:p-4">
           <div className="container mx-auto">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-black hover:bg-gray-200">
+            <div className="flex items-center space-x-3">
+              <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-black hover:bg-gray-200 shrink-0">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-xl font-bold text-black">Payment</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-black truncate">Payment</h1>
             </div>
           </div>
         </div>
 
-        <div className="container mx-auto p-4 max-w-2xl">
-          <div className="space-y-6">
+        <div className="container mx-auto p-3 sm:p-4 max-w-2xl">
+          <div className="space-y-4 sm:space-y-6">
             <Card className="border-gray-200">
-              <CardHeader>
-                <CardTitle className="text-black flex items-center space-x-2">
-                  <MapPin className="h-5 w-5" />
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="text-black flex items-center space-x-2 text-base sm:text-lg">
+                  <MapPin className="h-5 w-5 shrink-0" />
                   <span>Trip Details</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 px-4 sm:px-6">
                 <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="text-gray-700">{rideDetails.pickup.address}</span>
+                  <div className="flex items-start space-x-3 min-w-0">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mt-1.5 shrink-0"></div>
+                    <span className="text-sm sm:text-base text-gray-700 break-words min-w-0">{rideDetails.pickup.address}</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <span className="text-gray-700">{rideDetails.destination.address}</span>
+                  <div className="flex items-start space-x-3 min-w-0">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mt-1.5 shrink-0"></div>
+                    <span className="text-sm sm:text-base text-gray-700 break-words min-w-0">{rideDetails.destination.address}</span>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Distance</p>
-                    <p className="font-semibold text-black">{rideDetails.distance?.toFixed(1)} km</p>
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4 border-t border-gray-200">
+                  <div className="text-center min-w-0">
+                    <p className="text-xs sm:text-sm text-gray-500">Distance</p>
+                    <p className="font-semibold text-black text-sm sm:text-base truncate">{rideDetails.distance?.toFixed(1)} km</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Duration</p>
-                    <p className="font-semibold text-black">{rideDetails.duration}</p>
+                  <div className="text-center min-w-0">
+                    <p className="text-xs sm:text-sm text-gray-500">Duration</p>
+                    <p className="font-semibold text-black text-sm sm:text-base truncate">{rideDetails.duration}</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500">Price</p>
-                    <p className="font-semibold text-black">₹{rideDetails.price}</p>
+                  <div className="text-center min-w-0">
+                    <p className="text-xs sm:text-sm text-gray-500">Price</p>
+                    <p className="font-semibold text-black text-sm sm:text-base truncate">₹{rideDetails.price}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="border-gray-200">
-              <CardHeader>
-                <CardTitle className="text-black flex items-center space-x-2">
-                  <User className="h-5 w-5" />
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="text-black flex items-center space-x-2 text-base sm:text-lg">
+                  <User className="h-5 w-5 shrink-0" />
                   <span>Customer Details</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <User className="h-4 w-4 text-gray-500" />
-                  <span className="text-gray-700">{user?.firstName} {user?.lastName}</span>
+              <CardContent className="space-y-3 px-4 sm:px-6">
+                <div className="flex items-center space-x-3 min-w-0">
+                  <User className="h-4 w-4 text-gray-500 shrink-0" />
+                  <span className="text-sm sm:text-base text-gray-700 truncate">{user?.firstName} {user?.lastName}</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Phone className="h-4 w-4 text-gray-500" />
-                  <span className="text-gray-700">{user?.phone || 'Not provided'}</span>
+                <div className="flex items-center space-x-3 min-w-0">
+                  <Phone className="h-4 w-4 text-gray-500 shrink-0" />
+                  <span className="text-sm sm:text-base text-gray-700 truncate">{user?.phone || 'Not provided'}</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="h-4 w-4 text-gray-500" />
-                  <span className="text-gray-700">{user?.email}</span>
+                <div className="flex items-center space-x-3 min-w-0">
+                  <Mail className="h-4 w-4 text-gray-500 shrink-0" />
+                  <span className="text-sm sm:text-base text-gray-700 truncate">{user?.email}</span>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="border-gray-200">
-              <CardHeader>
-                <CardTitle className="text-black flex items-center space-x-2">
-                  <CreditCard className="h-5 w-5" />
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="text-black flex items-center space-x-2 text-base sm:text-lg">
+                  <CreditCard className="h-5 w-5 shrink-0" />
                   <span>Payment Method</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="px-4 sm:px-6">
                 <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
                   <div className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
                     <RadioGroupItem value="cod" id="cod" />
-                    <label htmlFor="cod" className="flex items-center space-x-3 cursor-pointer flex-1">
-                      <IndianRupee className="h-5 w-5 text-green-600" />
-                      <div>
-                        <p className="font-medium text-black">Cash Payment</p>
-                        <p className="text-sm text-gray-500">Pay with cash when you reach your destination</p>
+                    <label htmlFor="cod" className="flex items-center space-x-3 cursor-pointer flex-1 min-w-0">
+                      <IndianRupee className="h-5 w-5 text-green-600 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="font-medium text-black text-sm sm:text-base">Cash Payment</p>
+                        <p className="text-xs sm:text-sm text-gray-500 break-words">Pay with cash when you reach your destination</p>
                       </div>
                     </label>
                   </div>
@@ -234,16 +239,16 @@ const Payment = () => {
 
             <Card className="border-gray-200">
               <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    {getRideIcon(rideDetails.rideOption?.id)}
-                    <div>
-                      <h3 className="font-semibold text-black">{rideDetails.rideOption?.name}</h3>
-                      <p className="text-sm text-gray-500">{rideDetails.rideOption?.description}</p>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center space-x-3 min-w-0 flex-1">
+                    <div className="shrink-0">{getRideIcon(rideDetails.rideOption?.id)}</div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-black text-sm sm:text-base truncate">{rideDetails.rideOption?.name}</h3>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">{rideDetails.rideOption?.description}</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-xl text-black">₹{rideDetails.price}</p>
+                  <div className="text-right shrink-0">
+                    <p className="font-bold text-lg sm:text-xl text-black">₹{rideDetails.price}</p>
                   </div>
                 </div>
               </CardContent>

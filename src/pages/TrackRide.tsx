@@ -107,15 +107,13 @@ const TrackRide = () => {
         position: driverPos.current,
         map: mapInstance.current,
         icon: {
-          path: window.google.maps.SymbolPath.CIRCLE,
-          scale: 10,
-          fillColor: '#22c55e',
-          fillOpacity: 1,
-          strokeColor: '#ffffff',
-          strokeWeight: 3,
-        },
+          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="11" fill="%2322c55e" stroke="white" stroke-width="3"/></svg>'
+          ),
+          scaledSize: new window.google.maps.Size(28, 28),
+        } as any,
         title: 'Driver',
-      });
+      } as any);
     };
 
     if (window.google?.maps) initMap();
@@ -161,7 +159,7 @@ const TrackRide = () => {
         lat: driverPos.current.lat + dLat * step,
         lng: driverPos.current.lng + dLng * step,
       };
-      driverMarker.current.setPosition(driverPos.current);
+      (driverMarker.current as any).setPosition(driverPos.current);
       setEta((e) => Math.max(0, e - 1));
     }, 1000);
 

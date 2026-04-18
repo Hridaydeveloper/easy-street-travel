@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import RidePricing from './pages/RidePricing'
 import DriverPortal from './pages/DriverPortal'
 import DriverLogin from './pages/DriverLogin'
+import TrackRide from './pages/TrackRide'
 import Payment from './pages/Payment'
 import Services from './pages/Services'
 import About from './pages/About'
@@ -46,6 +47,7 @@ function App() {
               <Route path="/payment" element={<Payment />} />
               <Route path="/driver-portal" element={<DriverPortal />} />
               <Route path="/driver-login" element={<DriverLogin />} />
+              <Route path="/track-ride/:id" element={<TrackRide />} />
               <Route path="/services" element={<Services />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />

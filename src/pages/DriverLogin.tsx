@@ -3,14 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Car, ArrowLeft, AlertCircle } from "lucide-react";
+import { Car, ArrowLeft, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ALLOWED_DRIVER_EMAIL = 'dashriday856@gmail.com';
+const ALLOWED_DRIVER_PASSWORD = 'Hr10@#';
 const DRIVER_NAME = 'Hriday Das';
 
 const DriverLogin = () => {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -18,8 +21,11 @@ const DriverLogin = () => {
     e.preventDefault();
     setError('');
 
-    if (email.trim().toLowerCase() !== ALLOWED_DRIVER_EMAIL) {
-      setError("You don't have a driver dashboard account. Create one first.");
+    if (
+      email.trim().toLowerCase() !== ALLOWED_DRIVER_EMAIL ||
+      password !== ALLOWED_DRIVER_PASSWORD
+    ) {
+      setError('Access denied');
       return;
     }
 
@@ -42,7 +48,7 @@ const DriverLogin = () => {
               </div>
             </div>
             <CardTitle className="text-xl sm:text-2xl font-bold text-white">Drivio Driver Login</CardTitle>
-            <p className="text-gray-400 text-sm">Enter your driver email to continue</p>
+            <p className="text-gray-400 text-sm">Enter your driver credentials to continue</p>
           </CardHeader>
           <CardContent className="px-4 sm:px-6">
             {error && (
@@ -63,6 +69,28 @@ const DriverLogin = () => {
                   className="bg-gray-800 border-gray-600 text-white placeholder-gray-400"
                   required
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-white">Password</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 pr-10"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((s) => !s)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
               </div>
               <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
                 Login to Driver Portal

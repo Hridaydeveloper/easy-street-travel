@@ -88,6 +88,12 @@ const DriverPortal = () => {
     return () => { supabase.removeChannel(channel); };
   }, []);
 
+  const handleSignOut = () => {
+    localStorage.removeItem('driverProfile');
+    // Note: driverOnlineStatus is intentionally preserved per user preference
+    navigate('/');
+  };
+
   const earnings = {
     today: '₹8,785',
     week: '₹47,618',

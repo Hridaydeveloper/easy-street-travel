@@ -7,8 +7,18 @@ import { Car, ArrowLeft, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ALLOWED_DRIVER_EMAIL = 'dashriday856@gmail.com';
-const ALLOWED_DRIVER_PASSWORD = 'Hr10@#';
+// SHA-256 hash of the driver password. Plaintext is never stored in the codebase.
+const ALLOWED_DRIVER_PASSWORD_HASH =
+  '8c585777cdc41c1c202dff08491fe33662f45b2380b6185fde9e9ed9b17f5f77';
 const DRIVER_NAME = 'Hriday Das';
+
+async function sha256Hex(text: string): Promise<string> {
+  const buf = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
 
 const DriverLogin = () => {
   const [email, setEmail] = useState('');
@@ -17,13 +27,14 @@ const DriverLogin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
+    const passwordHash = await sha256Hex(password);
     if (
       email.trim().toLowerCase() !== ALLOWED_DRIVER_EMAIL ||
-      password !== ALLOWED_DRIVER_PASSWORD
+      passwordHash !== ALLOWED_DRIVER_PASSWORD_HASH
     ) {
       setError('Access denied');
       return;

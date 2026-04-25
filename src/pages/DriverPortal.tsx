@@ -459,14 +459,18 @@ const DriverPortal = () => {
       {/* Sidebar */}
       <aside className="w-full md:w-64 md:min-h-screen bg-gray-50 shadow-lg border-b md:border-r border-gray-200 flex flex-col">
         <div className="p-4 md:p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-2 mb-4">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center space-x-2 mb-4 hover:opacity-80 transition-opacity cursor-pointer w-full text-left"
+            aria-label="Go to home"
+          >
             <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center shrink-0">
               <Car className="h-4 md:h-6 w-4 md:w-6 text-white" />
             </div>
             <span className="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 truncate">
               Drivio
             </span>
-          </div>
+          </button>
 
           {/* Online Status Toggle */}
           <div className="flex items-center justify-between gap-2 p-3 bg-gray-100 rounded-lg">

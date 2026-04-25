@@ -101,7 +101,7 @@ const Navigation = () => {
                 Business
               </button>
               <div className="px-3 py-2 space-y-2">
-                <Button onClick={() => handleNavigation('/driver-login')} className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
+                <Button onClick={handleDriverClick} className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
                   Driver
                 </Button>
                 <div className="w-full">

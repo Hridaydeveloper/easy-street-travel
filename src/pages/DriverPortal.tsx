@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation, ArrowLeft, IndianRupee } from "lucide-react";
+import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation, ArrowLeft, IndianRupee, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useRideRequest } from "@/contexts/RideRequestContext";
 import RideRequestCard from "@/components/RideRequestCard";

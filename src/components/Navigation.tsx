@@ -10,12 +10,28 @@ const Navigation = () => {
     navigate(path);
     setIsOpen(false);
   };
+
+  const handleDriverClick = () => {
+    try {
+      const stored = localStorage.getItem('driverProfile');
+      if (stored) {
+        const profile = JSON.parse(stored);
+        if (profile?.isLoggedIn && profile?.email?.toLowerCase() === 'dashriday856@gmail.com') {
+          handleNavigation('/driver-portal');
+          return;
+        }
+      }
+    } catch {
+      // fall through to login
+    }
+    handleNavigation('/driver-login');
+  };
   return <nav className="bg-white shadow-sm border-b fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <button onClick={() => handleNavigation('/')} className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <button onClick={() => handleNavigation('/')} className="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer">
               <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 text-3xl">Drivio</span>
             </button>
           </div>
@@ -44,7 +60,7 @@ const Navigation = () => {
               Business
             </button>
             
-            <Button onClick={() => handleNavigation('/driver-login')} className="bg-indigo-600 text-white hover:bg-indigo-700">
+            <Button onClick={handleDriverClick} className="bg-indigo-600 text-white hover:bg-indigo-700">
               Driver
             </Button>
             
@@ -85,7 +101,7 @@ const Navigation = () => {
                 Business
               </button>
               <div className="px-3 py-2 space-y-2">
-                <Button onClick={() => handleNavigation('/driver-login')} className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
+                <Button onClick={handleDriverClick} className="w-full bg-indigo-600 text-white hover:bg-indigo-700">
                   Driver
                 </Button>
                 <div className="w-full">

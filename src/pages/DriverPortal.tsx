@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation, ArrowLeft, IndianRupee } from "lucide-react";
+import { Car, DollarSign, Star, Clock, MapPin, User, Settings, BarChart3, Navigation, ArrowLeft, IndianRupee, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useRideRequest } from "@/contexts/RideRequestContext";
 import RideRequestCard from "@/components/RideRequestCard";
@@ -87,6 +87,12 @@ const DriverPortal = () => {
 
     return () => { supabase.removeChannel(channel); };
   }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem('driverProfile');
+    // Note: driverOnlineStatus is intentionally preserved per user preference
+    navigate('/');
+  };
 
   const earnings = {
     today: '₹8,785',
@@ -453,14 +459,18 @@ const DriverPortal = () => {
       {/* Sidebar */}
       <aside className="w-full md:w-64 md:min-h-screen bg-gray-50 shadow-lg border-b md:border-r border-gray-200 flex flex-col">
         <div className="p-4 md:p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-2 mb-4">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center space-x-2 mb-4 hover:opacity-80 transition-opacity cursor-pointer w-full text-left"
+            aria-label="Go to home"
+          >
             <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center shrink-0">
               <Car className="h-4 md:h-6 w-4 md:w-6 text-white" />
             </div>
             <span className="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 truncate">
               Drivio
             </span>
-          </div>
+          </button>
 
           {/* Online Status Toggle */}
           <div className="flex items-center justify-between gap-2 p-3 bg-gray-100 rounded-lg">
@@ -502,7 +512,7 @@ const DriverPortal = () => {
           </div>
         </nav>
 
-        <div className="p-4 md:p-6 border-t border-gray-200 bg-gray-50">
+        <div className="p-4 md:p-6 border-t border-gray-200 bg-gray-50 space-y-2">
           <Button
             variant="outline"
             onClick={() => navigate('/')}
@@ -510,6 +520,14 @@ const DriverPortal = () => {
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Home
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleSignOut}
+            className="w-full justify-center md:justify-start text-red-600 border-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300 font-semibold text-sm md:text-base"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
           </Button>
         </div>
       </aside>

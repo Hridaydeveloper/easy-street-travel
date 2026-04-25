@@ -31,7 +31,7 @@ const Navigation = () => {
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <button onClick={() => handleNavigation('/')} className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <button onClick={() => handleNavigation('/')} className="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer">
               <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 text-3xl">Drivio</span>
             </button>
           </div>

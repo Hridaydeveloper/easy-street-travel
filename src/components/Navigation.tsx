@@ -10,6 +10,22 @@ const Navigation = () => {
     navigate(path);
     setIsOpen(false);
   };
+
+  const handleDriverClick = () => {
+    try {
+      const stored = localStorage.getItem('driverProfile');
+      if (stored) {
+        const profile = JSON.parse(stored);
+        if (profile?.isLoggedIn && profile?.email?.toLowerCase() === 'dashriday856@gmail.com') {
+          handleNavigation('/driver-portal');
+          return;
+        }
+      }
+    } catch {
+      // fall through to login
+    }
+    handleNavigation('/driver-login');
+  };
   return <nav className="bg-white shadow-sm border-b fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">

@@ -512,7 +512,7 @@ const DriverPortal = () => {
           </div>
         </nav>
 
-        <div className="p-4 md:p-6 border-t border-gray-200 bg-gray-50">
+        <div className="p-4 md:p-6 border-t border-gray-200 bg-gray-50 space-y-2">
           <Button
             variant="outline"
             onClick={() => navigate('/')}
@@ -520,6 +520,14 @@ const DriverPortal = () => {
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Home
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleSignOut}
+            className="w-full justify-center md:justify-start text-red-600 border-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300 font-semibold text-sm md:text-base"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
           </Button>
         </div>
       </aside>

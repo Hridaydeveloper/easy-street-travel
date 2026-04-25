@@ -7,10 +7,9 @@ import { Car, ArrowLeft, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ALLOWED_DRIVER_EMAIL = 'dashriday856@gmail.com';
-// SHA-256 hash of the driver password. The plaintext is never stored in the codebase.
+// SHA-256 hash of the driver password. Plaintext is never stored in the codebase.
 const ALLOWED_DRIVER_PASSWORD_HASH =
-  'd3fc764363ե'.replace(/[^0-9a-f]/g, '') || // placeholder stripped
-  '8e1d3a2f7b9c4e6a5d0f1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e';
+  '8c585777cdc41c1c202dff08491fe33662f45b2380b6185fde9e9ed9b17f5f77';
 const DRIVER_NAME = 'Hriday Das';
 
 async function sha256Hex(text: string): Promise<string> {

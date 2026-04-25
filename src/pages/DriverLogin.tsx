@@ -27,13 +27,14 @@ const DriverLogin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
+    const passwordHash = await sha256Hex(password);
     if (
       email.trim().toLowerCase() !== ALLOWED_DRIVER_EMAIL ||
-      password !== ALLOWED_DRIVER_PASSWORD
+      passwordHash !== ALLOWED_DRIVER_PASSWORD_HASH
     ) {
       setError('Access denied');
       return;
